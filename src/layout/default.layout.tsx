@@ -2,30 +2,22 @@ import React, { Component, Props } from "react";
 import { Button } from "antd";
 import styled from "styled-components";
 import Header from "./components/header.component";
-import { SideMenu } from "./components/side-menu.component";
+import SideMenu from "./components/side-menu.component";
 import Footer from "./components/footer.component";
+import { FlexRow, FlexColumn } from "../shared/components";
 
 const components = {
-  FlexColumn: styled.div`
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-  `,
-  FlexRow: styled.div`
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-  `,
   HeaderWrap: styled.div`
-    flex: 1;
+    flex-basis: 50px;
+    height: 50px;
   `,
   SideMenuWrap: styled.div`
-    flex-basis: 100px;
-    width: 100px;
+    flex-basis: 200px;
+    width: 200px;
   `,
   FooterWrap: styled.div`
-    flex-basis: 100px;
-    height: 100px;
+    flex-basis: 50px;
+    height: 50px;
   `,
   Content: styled.main`
     flex: 1;
@@ -47,14 +39,14 @@ const styles = (
 export class DefaultLayout extends Component {
   public render() {
     return (
-      <components.FlexColumn style={styles().full}>
+      <FlexColumn style={styles().full}>
         {this.layoutHeader()}
-        <components.FlexRow style={styles().autoFlex}>
+        <FlexRow style={styles().autoFlex}>
           {this.layoutSideMenu()}
           {this.lauyoutContent()}
-          {this.lauyoutFooter()}
-        </components.FlexRow>
-      </components.FlexColumn>
+        </FlexRow>
+        {this.lauyoutFooter()}
+      </FlexColumn>
     );
   }
 
@@ -69,7 +61,7 @@ export class DefaultLayout extends Component {
   public layoutSideMenu() {
     return (
       <components.SideMenuWrap>
-        <Header></Header>
+        <SideMenu></SideMenu>
       </components.SideMenuWrap>
     );
   }

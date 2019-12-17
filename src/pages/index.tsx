@@ -3,6 +3,7 @@ import { Consumer } from "reto";
 import { Test2Store } from "../store/test2";
 import StoreTable from "antd/lib/table/Table";
 
+// 使用通过hooks创建通过component访问的store
 export default class Index extends Component {
   public getStore() {
     return (
@@ -31,3 +32,16 @@ export default class Index extends Component {
     );
   }
 }
+
+// 使用基于hooks的store
+// export default function() {
+//   // 声明一个新的叫做 “count” 的 state 变量
+//   const [count, setCount] = useState(0);
+
+//   return (
+//     <div>
+//       <p>You clicked {count} times</p>
+//       <button onClick={() => setCount(count + 1)}>Click me</button>
+//     </div>
+//   );
+// }

@@ -1,7 +1,15 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, FunctionComponent, SFC } from "react";
 
-export default class Index extends Component {
+interface Props {
+  test?: number;
+}
+
+export default class Index extends React.Component<Props, {}> {
+  static defaultProps = {
+    test: 1
+  };
+
   public render() {
-    return <div>123</div>;
+    return <>{this.props.test}</>;
   }
 }

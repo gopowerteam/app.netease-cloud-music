@@ -16,7 +16,7 @@ function createWindow() {
   });
   mainWindow.loadURL(
     isDev
-      ? "http://localhost:3000"
+      ? "http://localhost:" + process.env.port
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
   mainWindow.on("closed", () => (mainWindow = null));

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Menu, Icon, Avatar, Row, Col } from "antd";
-import { FlexRow } from "../../shared/components";
+import { FlexRow } from "../shared/components";
+import { UserStatus } from "./user/user-status";
 
 export default class SideMenu extends Component {
   public onMenuClick() {}
@@ -8,23 +9,9 @@ export default class SideMenu extends Component {
   public render() {
     return (
       <section>
-        {this.userContainer()}
+        <UserStatus></UserStatus>
         {this.menuContainer()}
       </section>
-    );
-  }
-
-  public userContainer() {
-    return (
-      <Row gutter={16} type="flex" justify="start" align="middle">
-        <Col span={6}>
-          <Avatar size={48} icon="user" />
-        </Col>
-        <Col span={8}>未登录</Col>
-        <Col span={3}>
-          <Icon type="caret-right" />
-        </Col>
-      </Row>
     );
   }
 
@@ -43,7 +30,7 @@ export default class SideMenu extends Component {
           <Menu.Item key="3">朋友</Menu.Item>
         </Menu.ItemGroup>
         <Menu.ItemGroup key="g2" title="我的音乐">
-          <Menu.Item key="3">下载管理</Menu.Item>
+          <Menu.Item key="4">下载管理</Menu.Item>
         </Menu.ItemGroup>
       </Menu>
     );

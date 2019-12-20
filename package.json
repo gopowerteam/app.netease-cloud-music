@@ -32,7 +32,7 @@
     "electron-build": "electron-builder",
     "release": "yarn react-build && electron-builder --publish=always",
     "build": "yarn react-build && yarn electron-build",
-    "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
+    "start": "set PORT=3001 && concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3001 && electron .\""
   },
   "eslintConfig": {
     "extends": "react-app"

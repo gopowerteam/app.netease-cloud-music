@@ -1,5 +1,4 @@
 import React, { Component, Props } from "react";
-import { Button } from "antd";
 import styled from "styled-components";
 import Header from "../components/header.component";
 import SideMenu from "../components/side-menu.component";

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Menu, Icon, Avatar, Row, Col } from "antd";
-import { FlexRow } from "../shared/components";
+import { Menu } from "antd";
 import { UserStatus } from "./user/user-status";
 
 export default class SideMenu extends Component {

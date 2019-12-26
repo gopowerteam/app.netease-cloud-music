@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Modal } from "antd";
+import UserLoginForm from "./user-login-form";
 
 type LoginType = {
   visible: boolean;
@@ -19,14 +20,12 @@ export class UserLogin extends Component<any, LoginType> {
     return (
       <div>
         <Modal
-          title="Basic Modal"
+          title="用户登录"
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <UserLoginForm></UserLoginForm>
         </Modal>
       </div>
     );

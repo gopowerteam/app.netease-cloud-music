@@ -1,0 +1,100 @@
+[
+  {
+    "title": "发现音乐",
+    "icon": "",
+    "path": "",
+    "group": false,
+    "children": [
+      {
+        "title": "个性推荐",
+        "path": ""
+      },
+      {
+        "title": "歌单",
+        "path": ""
+      },
+      {
+        "title": "主播电台",
+        "path": ""
+      },
+      {
+        "title": "排行榜",
+        "path": ""
+      },
+      {
+        "title": "歌手",
+        "path": ""
+      },
+      {
+        "title": "最新音乐",
+        "path": ""
+      }
+    ]
+  },
+  {
+    "title": "私人FM",
+    "icon": "",
+    "path": "",
+    "group": false
+  },
+  {
+    "title": "视频",
+    "icon": "",
+    "path": "",
+    "group": false
+  },
+  {
+    "title": "朋友",
+    "icon": "",
+    "path": "",
+    "group": false
+  },
+  {
+    "title": "我的音乐",
+    "group": true,
+    "children": [
+      {
+        "title": "下载管理",
+        "icon": "",
+        "path": "",
+        "children": [
+          {
+            "title": "已下载单曲",
+            "path": ""
+          },
+          {
+            "title": "已下载节目",
+            "path": ""
+          },
+          {
+            "title": "正在下载",
+            "path": ""
+          }
+        ]
+      },
+      {
+        "title": "我的收藏",
+        "icon": "",
+        "path": "",
+        "children": [
+          {
+            "title": "专辑",
+            "path": ""
+          },
+          {
+            "title": "歌手",
+            "path": ""
+          },
+          {
+            "title": "视频",
+            "path": ""
+          },
+          {
+            "title": "专栏",
+            "path": ""
+          }
+        ]
+      }
+    ]
+  }
+]

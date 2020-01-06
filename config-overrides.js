@@ -1,4 +1,9 @@
-const { override, fixBabelImports, addLessLoader } = require("customize-cra");
+const {
+  override,
+  fixBabelImports,
+  addLessLoader,
+  addWebpackModuleRule
+} = require("customize-cra");
 
 module.exports = override(
   fixBabelImports("import", {
@@ -8,5 +13,20 @@ module.exports = override(
   }),
   addLessLoader({
     javascriptEnabled: true
+  }),
+  addWebpackModuleRule({
+    test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+    use: [
+      {
+        loader: "babel-loader"
+      },
+      {
+        loader: "@svgr/webpack",
+        options: {
+          babel: false,
+          icon: true
+        }
+      }
+    ]
   })
 );

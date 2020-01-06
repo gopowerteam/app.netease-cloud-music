@@ -1,0 +1,96 @@
+.full {
+  height: 100%;
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.full-absolute {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.no-warp {
+  flex-wrap: nowrap;
+}
+
+/* padding样式*/
+@padding: padding;
+@padding-value: 12px;
+
+.@{padding} {
+  padding: @padding-value;
+}
+.@{padding}-x {
+  padding: 0 @padding-value;
+}
+.@{padding}-y {
+  padding: @padding-value 0;
+}
+.@{padding}-left {
+  padding-left: @padding-value;
+}
+.@{padding}-right {
+  padding-right: @padding-value;
+}
+.@{padding}-top {
+  padding-top: @padding-value;
+}
+.@{padding}-bottom {
+  padding-bottom: @padding-value;
+}
+
+/* margin样式*/
+@margin: margin;
+@margin-value: 12px;
+
+.@{margin} {
+  margin: @margin-value!important;
+}
+.@{margin}-x {
+  margin: 0 @margin-value!important;
+}
+.@{margin}-y {
+  margin: @margin-value 0 !important;
+}
+.@{margin}-left {
+  margin-left: @margin-value!important;
+}
+.@{margin}-right {
+  margin-right: @margin-value!important;
+}
+.@{margin}-top {
+  margin-top: @margin-value!important;
+}
+.@{margin}-bottom {
+  margin-bottom: @margin-value!important;
+}

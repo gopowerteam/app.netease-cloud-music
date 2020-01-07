@@ -1,19 +1,21 @@
 import React, { Component, Props } from "react";
-import { Button } from "antd";
 import styled from "styled-components";
-import Header from "../components/header.component";
-import SideMenu from "../components/side-menu.component";
-import Footer from "../components/footer.component";
+import Header from "./components/default/header.component";
+import SideMenu from "./components/default/side-menu.component";
+import Footer from "./components/default/footer.component";
 import { FlexRow, FlexColumn } from "../shared/components";
+import Router from "../Router";
 
 const components = {
   HeaderWrap: styled.div`
     flex-basis: 50px;
     height: 50px;
+    background-color: #f7f7f7;
   `,
   SideMenuWrap: styled.div`
     flex-basis: 200px;
     width: 200px;
+    background-color: #ededed;
   `,
   FooterWrap: styled.div`
     flex-basis: 50px;
@@ -75,6 +77,10 @@ export class DefaultLayout extends Component {
   }
 
   public lauyoutContent() {
-    return <components.Content>111</components.Content>;
+    return (
+      <components.Content>
+        <Router></Router>
+      </components.Content>
+    );
   }
 }

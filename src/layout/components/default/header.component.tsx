@@ -9,7 +9,7 @@ const components = {
     flex: 1;
   `,
   SearchWrap: styled.div`
-    flex-basis: ;
+    flex-basis: 100px;
   `
 };
 

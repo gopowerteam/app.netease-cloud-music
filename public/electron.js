@@ -31,7 +31,7 @@ function createWindow() {
   });
 
   // 打开控制台
-  electron.globalShortcut.register("CommandOrControl+X", () => {
+  electron.globalShortcut.register("CommandOrControl+O", () => {
     mainWindow.webContents.openDevTools();
   });
 }

@@ -1,7 +1,7 @@
 [
   {
     "title": "发现音乐",
-    "icon": "",
+    "icon": "music",
     "path": "",
     "group": false,
     "children": [
@@ -33,19 +33,19 @@
   },
   {
     "title": "私人FM",
-    "icon": "",
+    "icon": "radio",
     "path": "",
     "group": false
   },
   {
     "title": "视频",
-    "icon": "",
+    "icon": "video",
     "path": "",
     "group": false
   },
   {
     "title": "朋友",
-    "icon": "",
+    "icon": "friend",
     "path": "",
     "group": false
   },
@@ -55,7 +55,7 @@
     "children": [
       {
         "title": "下载管理",
-        "icon": "",
+        "icon": "love",
         "path": "",
         "children": [
           {
@@ -74,7 +74,7 @@
       },
       {
         "title": "我的收藏",
-        "icon": "",
+        "icon": "collect",
         "path": "",
         "children": [
           {

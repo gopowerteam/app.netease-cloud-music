@@ -14,19 +14,15 @@ module.exports = override(
   addLessLoader({
     javascriptEnabled: true
   }),
-  addWebpackModuleRule({
-    test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-    use: [
-      {
-        loader: "babel-loader"
-      },
-      {
-        loader: "@svgr/webpack",
-        options: {
-          babel: false,
-          icon: true
-        }
-      }
-    ]
-  })
+  // addWebpackModuleRule({
+  //   test: /\.svg$/,
+  //   use: [
+  //     {
+  //       loader: "babel-loader"
+  //     },
+  //     {
+  //       loader: "react-svg-loader",
+  //     }
+  //   ]
+  // })
 );

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Menu, Icon, Avatar, Row, Col } from "antd";
-import menuList from "../../assets/json/menu.json";
+import menuList from "../../../assets/json/menu.json";
 import { ReactComponent as Cloud } from '../../assets/icons/cloud.svg'
 import { ReactSVG } from 'react-svg'
 import { Consumer } from 'reto'
 import styled from "styled-components";
 import { ClientStyle as Style } from 'react-css-component'
-import { MenuStore } from "../../store/menu.store";
+import { MenuStore } from "../../../store/menu.store";
 
 const css = /*css*/`
 .ant-menu-item.ant-menu-item-active{

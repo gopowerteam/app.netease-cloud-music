@@ -1,8 +1,8 @@
 import React, { Component, Props } from "react";
 import styled from "styled-components";
-import Header from "./components/header.component";
-import SideMenu from "./components/side-menu.component";
-import Footer from "./components/footer.component";
+import Header from "./components/default/header.component";
+import SideMenu from "./components/default/side-menu.component";
+import Footer from "./components/default/footer.component";
 import { FlexRow, FlexColumn } from "../shared/components";
 import Router from "../Router";
 

@@ -5,9 +5,7 @@ import { Provider as StoreProvider } from "reto";
 export function Test2Store() {
   const [count, setCount] = useState(100);
 
-  useEffect(() => {
-    console.log("x is updated.");
-  }, [count]);
+  useEffect(() => {}, [count]);
 
   function increase() {
     setCount(count + 1);

@@ -4,22 +4,20 @@ import menuList from "../../../assets/json/menu.json";
 import { ReactSVG } from "react-svg";
 import { Consumer } from "reto";
 import styled from "styled-components";
-import { ClientStyle as Style } from "react-css-component";
 import { MenuStore } from "../../../store/menu.store";
 
-const css = /*css*/ `
-.ant-menu-item.ant-menu-item-active{
-  color:#000;
-  fill:#000;
-}
-
-.ant-menu-item.ant-menu-item-selected{
-  color:red;
-  fill:red;
-}
-`;
-
 const components = {
+  ComponentWrap: styled.section`
+    .ant-menu-item.ant-menu-item-active {
+      color: #000;
+      fill: #000;
+    }
+
+    .ant-menu-item.ant-menu-item-selected {
+      color: red;
+      fill: red;
+    }
+  `,
   ReactSVG: styled(ReactSVG)`
     width: 28px;
     height: 28px;
@@ -47,15 +45,15 @@ export default class SideMenu extends Component {
       }
     };
   }
+
   public onUserClick() {}
 
   public render() {
     return (
-      <section>
+      <components.ComponentWrap>
         {this.userContainer()}
         {this.menuContainer()}
-        <Style css={css}> </Style>
-      </section>
+      </components.ComponentWrap>
     );
   }
 
@@ -86,8 +84,7 @@ export default class SideMenu extends Component {
           <Menu
             onClick={this.onMenuClick(menuStore)}
             style={{ width: 200, background: "transparent" }}
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
+            defaultSelectedKeys={this.getDefaultSelectKeys(menuStore)}
             mode="inline"
           >
             {menuList.map(item =>
@@ -99,9 +96,21 @@ export default class SideMenu extends Component {
     );
   }
 
+  public getDefaultSelectKeys(menuStore) {
+    let pathname = window.location.pathname;
+    pathname = pathname === "/" ? "/discover" : pathname;
+    const target = menuList.find(x => x.path && pathname.startsWith(x.path));
+
+    if (target) {
+      menuStore.update(target);
+    }
+
+    return target ? [target.path || ""] : [];
+  }
+
   public getMenuGroup(group) {
     return (
-      <Menu.ItemGroup key={group.title} title={group.title}>
+      <Menu.ItemGroup key={group.path} title={group.title}>
         {group.children.map(x => this.getMenuItem(x))}
       </Menu.ItemGroup>
     );
@@ -109,7 +118,7 @@ export default class SideMenu extends Component {
 
   public getMenuItem(item) {
     return (
-      <Menu.Item key={item.title}>
+      <Menu.Item key={item.path}>
         <Row gutter={8} align="middle" type="flex">
           <Col
             span={6}

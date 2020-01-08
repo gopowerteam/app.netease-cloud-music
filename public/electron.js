@@ -19,9 +19,10 @@ function createWindow() {
     // 隐藏标题栏
     titleBarStyle: "hiddenInset"
   });
+
   mainWindow.loadURL(
     isDev
-      ? "http://localhost:" + process.env.port
+      ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 

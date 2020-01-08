@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Index from "./pages";
 
 export default class Router extends Component {
@@ -7,9 +7,10 @@ export default class Router extends Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route path="/">
-            <Index></Index>
+          <Route exact path="/">
+            <Redirect push to="/discover/recommend"></Redirect>
           </Route>
+          <Route path="/discover/recommend" children={<Index />}></Route>
         </Switch>
       </BrowserRouter>
     );

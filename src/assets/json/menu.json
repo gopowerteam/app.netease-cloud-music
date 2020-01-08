@@ -2,61 +2,62 @@
   {
     "title": "发现音乐",
     "icon": "music",
-    "path": "",
+    "path": "/discover",
     "group": false,
     "children": [
       {
         "title": "个性推荐",
-        "path": ""
+        "path": "/discover/recommend"
       },
       {
         "title": "歌单",
-        "path": ""
+        "path": "/discover/list"
       },
       {
         "title": "主播电台",
-        "path": ""
+        "path": "/discover/broadcast"
       },
       {
         "title": "排行榜",
-        "path": ""
+        "path": "/discover/rank"
       },
       {
         "title": "歌手",
-        "path": ""
+        "path": "/discover/singer"
       },
       {
         "title": "最新音乐",
-        "path": ""
+        "path": "/discover/latest"
       }
     ]
   },
   {
     "title": "私人FM",
     "icon": "radio",
-    "path": "",
+    "path": "fm",
     "group": false
   },
   {
     "title": "视频",
     "icon": "video",
-    "path": "",
+    "path": "video",
     "group": false
   },
   {
     "title": "朋友",
     "icon": "friend",
-    "path": "",
+    "path": "friend",
     "group": false
   },
   {
     "title": "我的音乐",
     "group": true,
+    "path": "mine",
     "children": [
       {
         "title": "下载管理",
         "icon": "love",
-        "path": "",
+        "path": "/download",
         "children": [
           {
             "title": "已下载单曲",
@@ -75,7 +76,7 @@
       {
         "title": "我的收藏",
         "icon": "collect",
-        "path": "",
+        "path": "/collect",
         "children": [
           {
             "title": "专辑",

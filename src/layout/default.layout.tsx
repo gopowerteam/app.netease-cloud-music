@@ -10,16 +10,19 @@ const components = {
   HeaderWrap: styled.div`
     flex-basis: 50px;
     height: 50px;
+    position: relative;
     background-color: #f7f7f7;
   `,
   SideMenuWrap: styled.div`
     flex-basis: 200px;
     width: 200px;
+    position: relative;
     background-color: #ededed;
   `,
   FooterWrap: styled.div`
     flex-basis: 50px;
     height: 50px;
+    position: relative;
   `,
   Content: styled.main`
     flex: 1;

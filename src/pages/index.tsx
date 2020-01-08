@@ -1,7 +1,6 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Consumer } from "reto";
 import { Test2Store } from "../store/test2";
-import StoreTable from "antd/lib/table/Table";
 
 // 使用通过hooks创建通过component访问的store
 export default class Index extends Component {

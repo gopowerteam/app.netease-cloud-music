@@ -1,16 +1,14 @@
-import React, { Props } from "react";
+import React from "react";
 import { useEffect, useState } from "react";
 import { Provider as StoreProvider } from "reto";
 
 export function MenuStore() {
-  const [menu, updateMenu] = useState(1);
+  const [menu, updateMenu] = useState({} as any);
 
-  useEffect(() => {
-    console.log("x is updated.");
-  }, [menu]);
+  useEffect(() => {}, [menu]);
 
-  function update() {
-    updateMenu(menu);
+  function update(value) {
+    updateMenu(value);
   }
 
   return {

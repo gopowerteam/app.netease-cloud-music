@@ -1,4 +1,4 @@
-import React, { Props } from "react";
+import React from "react";
 import { useEffect, useState } from "react";
 import { Provider as StoreProvider } from "reto";
 

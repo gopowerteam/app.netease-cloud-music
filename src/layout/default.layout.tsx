@@ -25,6 +25,7 @@ const components = {
     position: relative;
   `,
   Content: styled.main`
+    overflow: auto;
     flex: 1;
   `
 };

@@ -24,9 +24,17 @@ const components = {
     height: 50px;
     position: relative;
   `,
-  Content: styled.main`
+  ContentWrap: styled.section`
     overflow: auto;
     flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  `,
+  Content: styled.main`
+    max-width: 1100px;
+    min-width: 700px;
+    padding: 0 25px;
   `
 };
 
@@ -82,9 +90,11 @@ export class DefaultLayout extends Component {
 
   public lauyoutContent() {
     return (
-      <components.Content>
-        <Router></Router>
-      </components.Content>
+      <components.ContentWrap>
+        <components.Content>
+          <Router></Router>
+        </components.Content>
+      </components.ContentWrap>
     );
   }
 }

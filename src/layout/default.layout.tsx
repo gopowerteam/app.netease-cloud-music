@@ -10,18 +10,21 @@ const components = {
   HeaderWrap: styled.div`
     flex-basis: 50px;
     height: 50px;
+    min-height: 50px;
     position: relative;
     background-color: #f7f7f7;
   `,
   SideMenuWrap: styled.div`
     flex-basis: 200px;
     width: 200px;
+    overflow: auto;
     position: relative;
     background-color: #ededed;
   `,
   FooterWrap: styled.div`
     flex-basis: 50px;
     height: 50px;
+    min-height: 50px;
     position: relative;
   `,
   ContentWrap: styled.section`
@@ -42,7 +45,8 @@ const styles = (
   props?: Props<any>
 ): { [key: string]: React.CSSProperties } => ({
   autoFlex: {
-    flex: 1
+    flex: 1,
+    position: "relative"
   },
   full: {
     width: "100%",
@@ -55,10 +59,12 @@ export class DefaultLayout extends Component {
     return (
       <FlexColumn style={styles().full}>
         {this.layoutHeader()}
-        <FlexRow style={styles().autoFlex}>
-          {this.layoutSideMenu()}
-          {this.lauyoutContent()}
-        </FlexRow>
+        <div style={styles().autoFlex}>
+          <FlexRow className="full-absolute">
+            {this.layoutSideMenu()}
+            {this.lauyoutContent()}
+          </FlexRow>
+        </div>
         {this.lauyoutFooter()}
       </FlexColumn>
     );

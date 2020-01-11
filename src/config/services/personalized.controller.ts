@@ -24,5 +24,11 @@ export const PersonalizedController: ControllerConfig = {
     controller,
     action: "djprogram",
     type: RequestMethod.Get
+  },
+  // 独家放送
+  privatecontent: {
+    controller,
+    action: "privatecontent",
+    type: RequestMethod.Get
   }
 }

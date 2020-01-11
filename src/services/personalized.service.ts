@@ -7,7 +7,7 @@ import { Observable } from 'rxjs'
  */
 export class PersonalizedService {
   /**
-   * 查询Banner
+   * 查询推荐歌单
    * @param requestParams
    */
   @Request({
@@ -16,4 +16,16 @@ export class PersonalizedService {
   public getPersonalized(requestParams: RequestParams): Observable<any> {
     return requestParams.request()
   }
+
+  /**
+   * 查询独家放送
+   * @param requestParams
+   */
+  @Request({
+    server: PersonalizedController.privatecontent
+  })
+  public getPrivateContent(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
+
 }

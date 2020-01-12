@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { Icon, Input } from "antd";
 import styled from "styled-components";
 import { Consumer } from "reto";
-import { MenuStore } from "../../../store/menu.store";
+import { RouterStore } from "../../../store/router.store";
+import menuList from "../../../assets/json/menu.json";
 
 const components = {
   HistoryWrap: styled.div`
@@ -87,9 +88,9 @@ export default class Header extends Component<{}, HeaderState> {
   public getMenuContainer() {
     return (
       <components.MenuWrap>
-        <Consumer of={MenuStore}>
-          {menuStore =>
-            this.getMenuChildren(menuStore.menu).map(item => (
+        <Consumer of={RouterStore}>
+          {routerStore =>
+            this.getMenuChildren(routerStore.location).map(item => (
               <components.HeaderMenuItem
                 key={item.title}
                 className={
@@ -127,13 +128,20 @@ export default class Header extends Component<{}, HeaderState> {
     );
   }
 
-  public getMenuChildren(menu) {
-    if (menu && menu.children && menu.children.length) {
-      this.setDefaultMenuItem(menu);
-      return menu.children;
-    } else {
-      return [];
+  public getMenuChildren(location) {
+    const target = menuList.find(x => x.path === location.pathname);
+    
+    if (!target) return [];
+
+    if (target.level === 1) {
+      return menuList.filter(x => x.parent === target.id);
     }
+
+    if (target.level === 2) {
+      return menuList.filter(x => x.parent === target.parent);
+    }
+
+    return [];
   }
 
   /**

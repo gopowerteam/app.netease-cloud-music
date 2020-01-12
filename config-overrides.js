@@ -9,7 +9,7 @@ const {
 function setWebpackConfig(app) {
   // build时设置publicPath
   return (config) => {
-    if (app.publicPath && process.env.NODE_ENV !== "production") {
+    if (app.publicPath && process.env.NODE_ENV === "production") {
       config.output.publicPath = `${app.publicPath}/`;
     }
     return config

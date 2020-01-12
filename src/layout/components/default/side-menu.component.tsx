@@ -4,7 +4,7 @@ import menuList from "../../../assets/json/menu.json";
 import { ReactSVG } from "react-svg";
 import { Consumer } from "reto";
 import styled from "styled-components";
-import { MenuStore } from "../../../store/menu.store";
+import { RouterStore } from "../../../store/router.store";
 
 const components = {
   ComponentWrap: styled.section`
@@ -35,15 +35,6 @@ export default class SideMenu extends Component {
         return this.findCurrentMenu(item.children, key);
       }
     }
-  }
-  public onMenuClick(menuStore) {
-    return ({ key }) => {
-      const target = this.findCurrentMenu(menuList, key);
-
-      if (target) {
-        menuStore.update(target);
-      }
-    };
   }
 
   public onUserClick() {}
@@ -79,38 +70,73 @@ export default class SideMenu extends Component {
 
   public menuContainer() {
     return (
-      <Consumer of={MenuStore}>
-        {menuStore => (
+      <Consumer of={RouterStore}>
+        {routerStore => (
           <Menu
-            onClick={this.onMenuClick(menuStore)}
+            onClick={this.onMenuClick(routerStore)}
             style={{ width: 200, background: "transparent" }}
-            defaultSelectedKeys={this.getDefaultSelectKeys(menuStore)}
+            defaultSelectedKeys={this.getDefaultSelectKeys(routerStore)}
             mode="inline"
           >
-            {menuList.map(item =>
-              item.group ? this.getMenuGroup(item) : this.getMenuItem(item)
-            )}
+            {this.getItemList().map(item => this.getMenuItem(item))},
+            {this.getGroupList().map(item => this.getMenuGroup(item))}
           </Menu>
         )}
       </Consumer>
     );
   }
 
-  public getDefaultSelectKeys(menuStore) {
-    let pathname = window.location.pathname;
-    pathname = pathname === "/" ? "/discover" : pathname;
-    const target = menuList.find(x => x.path && pathname.startsWith(x.path));
+  public onMenuClick(routerStore) {
+    return ({ key }) => {
+      const item = menuList.find(x => x.id.toString() === key);
 
-    if (target) {
-      menuStore.update(target);
+      if (item && item.path) {
+        routerStore.history.push(item.path);
+      }
+    };
+  }
+
+  public getItemList() {
+    return menuList.filter(x => x.level === 1 && !x.group);
+  }
+
+  public getGroupList() {
+    return menuList
+      .filter(x => x.group && x.level === 1)
+      .reduce((result, value) => {
+        let target = result.find(x => x.title === value.group);
+
+        if (!target) {
+          target = {
+            title: value.group,
+            path: Math.random(),
+            children: []
+          };
+          result.push(target);
+        }
+
+        target.children.push(value);
+
+        return result;
+      }, [] as any[]);
+  }
+
+  public getDefaultSelectKeys(routerStore) {
+    const { location } = routerStore;
+    let target = menuList.find(x => x.path === location.pathname) as any;
+
+    if (!target) return [];
+
+    if (target.level !== 1) {
+      target = menuList.find(x => x.id === target.parent);
     }
 
-    return target ? [target.path || ""] : [];
+    return [target.id.toString()];
   }
 
   public getMenuGroup(group) {
     return (
-      <Menu.ItemGroup key={group.path} title={group.title}>
+      <Menu.ItemGroup key={group.title} title={group.title}>
         {group.children.map(x => this.getMenuItem(x))}
       </Menu.ItemGroup>
     );
@@ -118,7 +144,7 @@ export default class SideMenu extends Component {
 
   public getMenuItem(item) {
     return (
-      <Menu.Item key={item.path}>
+      <Menu.Item key={item.id}>
         <Row gutter={8} align="middle" type="flex">
           <Col
             span={6}

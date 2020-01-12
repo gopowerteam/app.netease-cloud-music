@@ -1,8 +1,9 @@
 import React from "react";
 
+import { RouterProvider } from "./router.store";
 import { MenuProvider } from "./menu.store";
 import { Test2Provider } from "./test2";
-const providers: any[] = [MenuProvider, Test2Provider];
+const providers: any[] = [RouterProvider, MenuProvider, Test2Provider];
 
 const ProvidersComposer = props =>
   props.providers.reduceRight(

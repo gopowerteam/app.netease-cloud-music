@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Provider as StoreProvider } from "reto";
 
 export function UserStore() {
-  const [userName, setUserName] = useState({ userName: "" });
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {}, [userName]);
 

@@ -13,8 +13,10 @@ function createWindow() {
   Menu.setApplicationMenu(null);
 
   mainWindow = new BrowserWindow({
-    width: 900,
+    width: 1000,
     height: 680,
+    minWidth: 1000,
+    minHeight: 680,
     show: false,
     // 隐藏标题栏
     titleBarStyle: "hiddenInset"

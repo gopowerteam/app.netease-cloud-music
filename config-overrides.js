@@ -2,18 +2,20 @@ const {
   override,
   fixBabelImports,
   addLessLoader,
-  addWebpackModuleRule
+  addWebpackModuleRule,
+  addWebpackAlias
 } = require("customize-cra");
 
+const path = require("path");
 
 function setWebpackConfig(app) {
   // build时设置publicPath
-  return (config) => {
+  return config => {
     if (app.publicPath && process.env.NODE_ENV === "production") {
       config.output.publicPath = `${app.publicPath}/`;
     }
-    return config
-  }
+    return config;
+  };
 }
 
 module.exports = override(
@@ -26,6 +28,9 @@ module.exports = override(
     javascriptEnabled: true
   }),
   setWebpackConfig({
-    publicPath: '/netease-cloud-music'
+    publicPath: "/netease-cloud-music"
+  }),
+  addWebpackAlias({
+    "~": path.resolve(__dirname, "src")
   })
 );

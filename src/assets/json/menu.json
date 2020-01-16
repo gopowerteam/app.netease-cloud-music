@@ -4,7 +4,8 @@
     "level": 1,
     "title": "发现音乐",
     "icon": "music",
-    "path": "/discover/recommend"
+    "path": "/discover/recommend",
+    "group": "乐库"
   },
   {
     "id": 2,
@@ -54,14 +55,16 @@
     "level": 1,
     "title": "私人FM",
     "icon": "radio",
-    "path": "/fm"
+    "path": "/fm",
+    "group": "乐库"
   },
   {
     "id": 9,
     "level": 1,
     "title": "视频",
     "icon": "video",
-    "path": "/video"
+    "path": "/video",
+    "group": "乐库"
   },
   {
     "id": 10,

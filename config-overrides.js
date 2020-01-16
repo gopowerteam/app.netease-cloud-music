@@ -2,7 +2,6 @@ const {
   override,
   fixBabelImports,
   addLessLoader,
-  addWebpackModuleRule,
   addWebpackAlias
 } = require("customize-cra");
 

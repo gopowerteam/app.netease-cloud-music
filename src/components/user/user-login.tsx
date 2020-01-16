@@ -1,32 +1,45 @@
 import React, { Component } from "react";
 import { Modal } from "antd";
+import EmailLogin from "./login/email-login";
 
 type LoginType = {
+  mode: string;
   visible: boolean;
 };
 
-export class UserLogin extends Component<any, LoginType> {
+type LoginProp = {
+  onLogined: (data) => void;
+};
+
+export class UserLogin extends Component<LoginProp, LoginType> {
   constructor(props: any) {
     super(props);
     this.state = {
+      mode: "用户登录",
       visible: false
     };
     this.handleOk = this.handleOk.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    this.loginSuccess = this.loginSuccess.bind(this);
+  }
+
+  private loginSuccess(values) {
+    this.handleOk();
+    this.props.onLogined(values);
   }
 
   public render() {
     return (
       <div>
         <Modal
-          title="Basic Modal"
+          title={this.state.mode}
           visible={this.state.visible}
-          onOk={this.handleOk}
           onCancel={this.handleCancel}
+          centered
+          wrapClassName="register-model"
+          footer={null}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <EmailLogin onLoginSuccess={this.loginSuccess}></EmailLogin>
         </Modal>
       </div>
     );

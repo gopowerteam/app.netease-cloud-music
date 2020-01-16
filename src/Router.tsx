@@ -22,7 +22,7 @@ function RouterContainer() {
   React.useEffect(() => {
     routerStore.updateLocation(location);
     routerStore.updateHistory(history);
-  }, [location, history]);
+  }, [location, history, routerStore]);
 
   return (
     <Switch>

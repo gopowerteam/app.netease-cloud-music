@@ -1,12 +1,8 @@
 {
-  "extends": "./ts-config.path.json",
+  "extends": "./tsconfig-extend.json",
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -22,8 +18,5 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "include": [
-    "src",
-    "typings/**/*.d.ts"
-  ]
+  "include": ["src", "typings/**/*.d.ts"]
 }

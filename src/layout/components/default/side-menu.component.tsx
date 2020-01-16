@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Menu, Icon, Avatar, Row, Col } from "antd";
+import { Menu, Row, Col } from "antd";
 import menuList from "../../../assets/json/menu.json";
 import { ReactSVG } from "react-svg";
 import { Consumer } from "reto";
 import styled from "styled-components";
 import { RouterStore } from "../../../store/router.store";
+import { UserStatus } from "~/components/user/user-status";
 
 const components = {
   ComponentWrap: styled.section`
@@ -42,29 +43,9 @@ export default class SideMenu extends Component {
   public render() {
     return (
       <components.ComponentWrap>
-        {this.userContainer()}
+        <UserStatus></UserStatus>
         {this.menuContainer()}
       </components.ComponentWrap>
-    );
-  }
-
-  public userContainer() {
-    return (
-      <Row
-        className="padding"
-        gutter={8}
-        type="flex"
-        justify="start"
-        align="middle"
-      >
-        <Col>
-          <Avatar size={40} icon="user" />
-        </Col>
-        <Col>未登录</Col>
-        <Col>
-          <Icon type="caret-right" />
-        </Col>
-      </Row>
     );
   }
 

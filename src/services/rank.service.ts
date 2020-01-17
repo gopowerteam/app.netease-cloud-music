@@ -11,9 +11,21 @@ export class RankService {
    * @param requestParams
    */
   @Request({
-    server: TopController.list
+    server: TopController.list,
+    force: true
   })
   public getTopSongList(requestParams: RequestParams): Observable<any> {
+    return requestParams.request();
+  }
+
+  /**
+   * 查询排行榜项目
+   * @param requestParams
+   */
+  @Request({
+    server: TopController.rankItems
+  })
+  public getRankItems(requestParams: RequestParams): Observable<any> {
     return requestParams.request();
   }
 }

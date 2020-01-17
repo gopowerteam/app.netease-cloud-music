@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { RankType } from "./rank-song.config";
 import { RankService } from "~/services/rank.service";
 import { RequestParams } from "~/core/http";
+import { Icon } from "antd";
 
 type TopListProp = {
-  rankType?: RankType;
+  idx: string;
 };
 
 const components = {
@@ -16,7 +17,27 @@ const components = {
   `,
   Title: styled.div`
     flex-basis: 70px;
+    height: 70px;
+    justify-content: space-between;
+
     background-color: #6597e7;
+    .title-bg {
+      background-position: left center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 100%;
+      display: inline-block;
+      width: 200px;
+    }
+    .play {
+      font-size: 32px;
+      margin-right: 10px;
+      color: #fffdfd;
+      &:hover {
+        color: gray;
+        cursor: pointer;
+      }
+    }
   `,
   Body: styled.div`
     height: 300px;
@@ -28,7 +49,13 @@ const components = {
     padding: 0 10px;
     flex-basis: 30px;
     line-height: 30px;
-    background-color: #a3f1f1;
+    background-color: #f2f2f2;
+    .link {
+      color: #b4b4b4;
+      &:hover {
+        color: gray;
+      }
+    }
   `,
   TrackItem: styled.div`
     line-height: 30px;
@@ -48,33 +75,38 @@ const components = {
 };
 
 function TopList(prop: TopListProp) {
-  const isSongRank = !!prop.rankType;
+  const isSongRank = !!prop.idx;
 
   const [list, updateList] = useState(new Array<any>());
-  const [background, updateBackground] = useState("");
+  const [background, updateBackground] = useState(
+    "http://p2.music.126.net/N2HO5xfYEqyQ8q6oxCw8IQ==/18713687906568048.jpg"
+  );
   const rankSongService = new RankService();
 
   useEffect(() => {
-    if (list.length) return;
-    console.log(prop.rankType, "123");
-    if (isSongRank) {
-      rankSongService
-        .getTopSongList(new RequestParams({ idx: prop.rankType!.value }))
-        .subscribe(data => {
-          updateList(data.playlist.tracks);
-          updateBackground(data.playlist.coverImgUrl);
-        });
-    }
-  });
+    // rankSongService
+    //   .getTopSongList(new RequestParams({ idx: prop.idx }))
+    //   .subscribe(data => {
+    //     updateList(data.playlist.tracks);
+    //     updateBackground(data.playlist.coverImgUrl);
+    //   });
+  }, [prop.idx]);
 
   return (
     <components.Wrapper className="flex-column">
       <components.Title
+        className="flex-row align-items-center"
         style={{
           backgroundImage: `url(${background})`
         }}
       >
-        {isSongRank ? prop.rankType!.name : "歌手榜"}
+        <div
+          className="title-bg"
+          style={{
+            backgroundImage: `url(${background})`
+          }}
+        ></div>
+        <Icon className="play" type="play-circle" />
       </components.Title>
       <components.Body>
         {list.slice(0, 9).map((item, index) => {
@@ -89,7 +121,9 @@ function TopList(prop: TopListProp) {
         })}
       </components.Body>
       <components.Footer>
-        <a href="#">查看全部></a>
+        <a href="#" className="link">
+          查看全部>
+        </a>
       </components.Footer>
     </components.Wrapper>
   );

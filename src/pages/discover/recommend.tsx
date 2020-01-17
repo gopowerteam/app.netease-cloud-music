@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Carousel, Icon } from "antd";
-import { BannerService } from "../../services/banner.service";
-import { RequestParams } from "../../core/http";
-import { PersonalizedService } from "../../services/personalized.service";
-import { ReactComponent as CanlendarSvg } from "../../assets/icons/calendar.svg";
-import SongListItem from "../../components/items/songlist-item";
-import PrivateContentItem from "../../components/items/private-content-item";
-
+import { BannerService } from "~/services/banner.service";
+import { RequestParams } from "~/core/http";
+import { PersonalizedService } from "~/services/personalized.service";
+import { ReactComponent as CanlendarSvg } from "~/assets/icons/calendar.svg";
+import SongListItem from "~/components/items/songlist-item";
+import PrivateContentItem from "~/components/items/private-content-item";
+import MusicItem from "~/components/items/music-item";
+import MVItem from "~/components/items/mv-item";
+import RadioItem from "~/components/items/radio-item";
 const components = {
   Wrapper: styled.section`
     padding: 10px 0;
@@ -75,6 +77,17 @@ const components = {
         }
       }
     }
+  `,
+  NewMusicContainer: styled.div`
+    .container {
+      height: 500px;
+    }
+  `,
+  MusicItemWrapper: styled(MusicItem)`
+    width: 50%;
+    height: 100px;
+    background: red;
+    padding: 10px;
   `
 };
 
@@ -82,6 +95,9 @@ interface RecommendState {
   banners: any[];
   recommends: any[];
   privates: any[];
+  songs: any[];
+  mv: any[];
+  radios: any[];
 }
 
 // 使用通过hooks创建通过component访问的store
@@ -91,7 +107,14 @@ export default class Recommend extends Component<{}, RecommendState> {
 
   constructor(props) {
     super(props);
-    this.state = { banners: [], recommends: [], privates: [] };
+    this.state = {
+      banners: [],
+      recommends: [],
+      privates: [],
+      songs: [],
+      mv: [],
+      radios: []
+    };
   }
 
   public render() {
@@ -100,6 +123,9 @@ export default class Recommend extends Component<{}, RecommendState> {
         {this.getBannerContainer()}
         {this.getSongListContainer()}
         {this.getPrivateContainer()}
+        {this.getNewSongContainer()}
+        {this.getMVContainer()}
+        {this.getRadioContainer()}
       </components.Wrapper>
     );
   }
@@ -108,6 +134,9 @@ export default class Recommend extends Component<{}, RecommendState> {
     this.getBannerList();
     this.getSongList();
     this.getPrivateContentList();
+    this.getNewSongs();
+    this.getMVList();
+    this.getRadioList();
   }
 
   /**
@@ -180,6 +209,58 @@ export default class Recommend extends Component<{}, RecommendState> {
     );
   }
 
+  public getNewSongContainer() {
+    return (
+      <components.NewMusicContainer className="margin-bottom">
+        <div className="flex-row align-items-center margin-bottom">
+          <h3>最新音乐</h3>
+          <Icon type="right"></Icon>
+        </div>
+        <div className="container flex-column flex-wrap">
+          {this.state.songs.map((item, index) => (
+            <components.MusicItemWrapper
+              key={item.id}
+              data={item}
+              index={index + 1}
+            ></components.MusicItemWrapper>
+          ))}
+        </div>
+      </components.NewMusicContainer>
+    );
+  }
+
+  public getMVContainer() {
+    return (
+      <div className="margin-bottom">
+        <div className="flex-row align-items-center margin-bottom">
+          <h3>推荐MV</h3>
+          <Icon type="right"></Icon>
+        </div>
+        <div className="flex-row">
+          {this.state.mv.map(item => (
+            <MVItem key={item.id} data={item}></MVItem>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  public getRadioContainer() {
+    return (
+      <div className="margin-bottom">
+        <div className="flex-row align-items-center margin-bottom">
+          <h3>主播电台</h3>
+          <Icon type="right"></Icon>
+        </div>
+        <div className="flex-row">
+          {this.state.radios.map(item => (
+            <RadioItem key={item.id} data={item}></RadioItem>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   /**
    * 获取Banner列表
    */
@@ -219,6 +300,36 @@ export default class Recommend extends Component<{}, RecommendState> {
       .subscribe(({ result }) => {
         this.setState({
           privates: result
+        });
+      });
+  }
+
+  private getNewSongs() {
+    this.personalizedService
+      .getNewSongList(new RequestParams())
+      .subscribe(({ result }) => {
+        this.setState({
+          songs: result
+        });
+      });
+  }
+
+  private getMVList() {
+    this.personalizedService
+      .getMVList(new RequestParams())
+      .subscribe(({ result }) => {
+        this.setState({
+          mv: result
+        });
+      });
+  }
+
+  private getRadioList() {
+    this.personalizedService
+      .getRadioList(new RequestParams())
+      .subscribe(({ result }) => {
+        this.setState({
+          radios: result
         });
       });
   }

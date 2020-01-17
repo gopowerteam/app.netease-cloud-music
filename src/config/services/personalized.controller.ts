@@ -30,5 +30,11 @@ export const PersonalizedController: ControllerConfig = {
     controller,
     action: "privatecontent",
     type: RequestMethod.Get
-  }
+  },
+  // 推荐MV
+  mv: {
+    controller,
+    action: "mv",
+    type: RequestMethod.Get
+  },
 }

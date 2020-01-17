@@ -29,11 +29,16 @@ const components = {
     }
     .title {
       position: absolute;
-      width: 100px;
-      top: 0;
-      right: 0;
-      height: 15px;
-      line-height: 15px;
+      width: 80px;
+      top: 1px;
+      right: 1px;
+      height: 20px;
+      line-height: 20px;
+      text-align: right;
+      padding-right: 5px;
+      color: white;
+      font-size: 11px;
+      background-image: linear-gradient(90deg, #66666621 25%, #666666de 80%);
     }
     .play {
       position: absolute;
@@ -58,6 +63,7 @@ export default function TopBlock(prop: TopBlockProp) {
   const rankService = new RankService();
 
   const [tracks, updateTracks] = useState(new Array<any>());
+  const [playCount, updatePlayCount] = useState("0");
   const [coverImgUrl, updateImageUrl] = useState(
     "http://p1.music.126.net/8-GBrukQ3BHhs4CmK6qE4w==/109951163424197392.jpg"
   );
@@ -68,13 +74,17 @@ export default function TopBlock(prop: TopBlockProp) {
     //   .subscribe(data => {
     //     updateImageUrl(data.playlist.coverImgUrl);
     //     updateTracks(data.playlist.tracks);
+    //     updatePlayCount((data.playlist.playCount / 10000).toFixed(0));
     //   });
   }, [prop.idx]);
 
   return (
     <components.wrap>
       <components.content style={{ backgroundImage: `url(${coverImgUrl})` }}>
-        <div className="title">1111</div>
+        <div className="title">
+          <Icon type="customer-service" style={{ marginRight: "10px" }} />
+          {playCount}万
+        </div>
         <Icon className="play" type="play-circle" />
       </components.content>
       <components.footer>{prop.name}</components.footer>

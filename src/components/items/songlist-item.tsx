@@ -2,6 +2,8 @@ import styled from "styled-components";
 import React, { Component } from "react";
 import { Icon } from "antd";
 import { ReactComponent as PlaySvg } from "../../assets/icons/play.svg";
+import { Consumer } from "reto";
+import { RouterStore } from "~/store/router.store";
 
 const components = {
   Wrapper: styled.section`
@@ -78,11 +80,19 @@ export default class SongListItem extends Component<
   SongListItemState
 > {
   public render() {
+    const { data } = this.props;
+
     return (
-      <components.Wrapper>
-        {this.getImgContainer()}
-        {this.getNameContainer()}
-      </components.Wrapper>
+      <Consumer of={RouterStore}>
+        {routerStore => (
+          <components.Wrapper
+            onClick={() => this.openSongListDetail(routerStore, data.id)}
+          >
+            {this.getImgContainer()}
+            {this.getNameContainer()}
+          </components.Wrapper>
+        )}
+      </Consumer>
     );
   }
 
@@ -124,5 +134,9 @@ export default class SongListItem extends Component<
     } else {
       return count;
     }
+  }
+
+  private openSongListDetail(routerStore, id) {
+    routerStore.history.push(`/detail/song-list/${id}`);
   }
 }

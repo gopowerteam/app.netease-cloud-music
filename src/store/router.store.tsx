@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { Provider as StoreProvider } from "reto";
+import { Provider as StoreProvider, useStore } from "reto";
+import { useParams } from "react-router-dom";
 
 export function RouterStore() {
   const { hash, search, pathname } = window.location;
@@ -13,6 +14,8 @@ export function RouterStore() {
 
   const [history, _updateHistory] = useState();
 
+  const [params, _updateParams] = useState();
+
   function updateLocation(value) {
     _updateLocation(value);
   }
@@ -20,12 +23,17 @@ export function RouterStore() {
   function updateHistory(value) {
     _updateHistory(value);
   }
+  function updateParams(value) {
+    _updateParams(value);
+  }
 
   return {
     location,
     history,
+    params,
     updateLocation,
-    updateHistory
+    updateHistory,
+    updateParams
   };
 }
 

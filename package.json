@@ -14,6 +14,7 @@
     "cross-env": "^6.0.3",
     "customize-cra": "^0.8.0",
     "electron-is-dev": "^1.1.0",
+    "moment": "^2.24.0",
     "react": "^16.11.0",
     "react-app-rewired": "^2.1.4",
     "react-css-component": "^1.0.2",

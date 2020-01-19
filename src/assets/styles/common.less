@@ -43,6 +43,18 @@
   flex-wrap: nowrap;
 }
 
+.stripe {
+  > div {
+    background-color: #f2f2f2c2;
+    &:nth-child(2n-1) {
+      background-color: #f8faf8;
+    }
+    &:hover {
+      background-color: #e8e8e8;
+    }
+  }
+}
+
 /* padding样式*/
 @padding: padding;
 @padding-value: 12px;

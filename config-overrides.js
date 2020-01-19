@@ -30,6 +30,6 @@ module.exports = override(
     publicPath: "/netease-cloud-music"
   }),
   addWebpackAlias({
-    "~": path.resolve(__dirname, "src/")
+    "~": path.resolve(__dirname, "src")
   })
 );

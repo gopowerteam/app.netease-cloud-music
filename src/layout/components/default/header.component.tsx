@@ -102,7 +102,7 @@ export default class Header extends Component<{}, HeaderState> {
                     ? "actived"
                     : ""
                 }
-                onClick={() => this.onSelectMenuItem(item)}
+                onClick={() => this.onSelectMenuItem(item, routerStore)}
               >
                 {item.title}
               </components.HeaderMenuItem>
@@ -158,7 +158,7 @@ export default class Header extends Component<{}, HeaderState> {
       !menu.children.includes(this.state.currentMenu)
     ) {
       setTimeout(() => {
-        this.onSelectMenuItem(defaultItem);
+        this.onSelectMenuItem(defaultItem, {});
       });
     }
   }
@@ -167,7 +167,9 @@ export default class Header extends Component<{}, HeaderState> {
    * 选择菜单项目
    * @param item
    */
-  public onSelectMenuItem(item) {
+  public onSelectMenuItem(item, store) {
     this.setState({ currentMenu: item });
+    if (!item.path) return;
+    store.history.push(item.path);
   }
 }

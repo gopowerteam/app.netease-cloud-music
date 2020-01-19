@@ -152,7 +152,6 @@ export default class MusicList extends Component<
         this.setState({
           songs
         });
-        console.log(songs);
       });
   }
 }

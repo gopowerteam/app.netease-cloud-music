@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { RequestParams } from "~/core/http";
 import { Icon } from "antd";
-import { PlayListService } from "~/services/play-list.service";
+import { PlayListService } from "~/services/playlist.service";
 import { dateFormat } from "~/utils/filter";
 import { RankService } from "~/services/rank.service";
 
@@ -105,7 +105,7 @@ function TopList(prop: TopListProp) {
   useEffect(() => {
     if (prop.ToplistType) {
       playListService
-        .getDetail(new RequestParams({ id: prop.id }))
+        .getPlayListDetail(new RequestParams({ id: prop.id }))
         .subscribe(data => {
           setDetail(data.playlist);
           setUpdateDate(dateFormat(data.playlist.trackUpdateTime, "MM月dd日"));

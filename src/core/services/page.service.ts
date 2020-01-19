@@ -23,16 +23,20 @@ export class PageService extends ExtendService {
     this.pageSizeOpts = this.default.pageSizeOpts
   }
 
+
+
   public before = params => {
     params.data = {
       ...params.data,
-      size: this.pageSize,
-      page: this.pageIndex - 1
+      limit: this.pageSize,
+      offset: (this.pageIndex - 1) * this.pageSize
     }
   }
 
   public after = (data: any, params) => {
-    this.total = data.totalElements
+    if (data.total) {
+      this.total = data.total
+    }
   }
 
   public reset() {

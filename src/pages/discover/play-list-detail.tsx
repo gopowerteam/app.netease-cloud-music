@@ -18,21 +18,21 @@ export default function PlayList(prop) {
   const [info, setInfo] = useState({});
 
   useEffect(() => {
-    rankService.getTopSongList(new RequestParams({ idx })).subscribe(data => {
-      const playList = data.playlist;
-      setCreater(playList.creator);
-      setInfo({
-        playCount: playList.playCount,
-        trackCount: playList.trackCount,
-        tags: playList.tags,
-        coverImgUrl: playList.coverImgUrl,
-        updateTime: playList.updateTime,
-        createTime: playList.createTime,
-        description: playList.description,
-        name: playList.name,
-        shareCount: playList.shareCount
-      });
-    });
+    // rankService.getTopSongList(new RequestParams({ idx })).subscribe(data => {
+    //   const playList = data.playlist;
+    //   setCreater(playList.creator);
+    //   setInfo({
+    //     playCount: playList.playCount,
+    //     trackCount: playList.trackCount,
+    //     tags: playList.tags,
+    //     coverImgUrl: playList.coverImgUrl,
+    //     updateTime: playList.updateTime,
+    //     createTime: playList.createTime,
+    //     description: playList.description,
+    //     name: playList.name,
+    //     shareCount: playList.shareCount
+    //   });
+    // });
   }, [idx]);
 
   return (

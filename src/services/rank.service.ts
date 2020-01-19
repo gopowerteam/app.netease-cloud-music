@@ -1,4 +1,4 @@
-import { TopController } from "../config/services/top.controller";
+import { TopListController } from "../config/services/top-list.controller";
 import { Request, RequestParams } from "../core/http";
 import { Observable } from "rxjs";
 
@@ -7,14 +7,13 @@ import { Observable } from "rxjs";
  */
 export class RankService {
   /**
-   * 查询排行榜
+   * 查询歌手排行
    * @param requestParams
    */
   @Request({
-    server: TopController.list,
-    force: true
+    server: TopListController.topArtists
   })
-  public getTopSongList(requestParams: RequestParams): Observable<any> {
+  public getTopArtists(requestParams: RequestParams): Observable<any> {
     return requestParams.request();
   }
 
@@ -23,7 +22,7 @@ export class RankService {
    * @param requestParams
    */
   @Request({
-    server: TopController.topList
+    server: TopListController.topList
   })
   public getTopList(requestParams: RequestParams): Observable<any> {
     return requestParams.request();

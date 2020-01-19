@@ -3,22 +3,21 @@ import styled from "styled-components";
 import { RequestParams } from "~/core/http";
 import { Icon } from "antd";
 import { PlayListService } from "~/services/play-list.service";
+import { dateFormat } from "~/utils/filter";
+import { RankService } from "~/services/rank.service";
 
 type TopListProp = {
   id: string;
   trackUpdateTime: number;
   coverImgUrl: string;
-  listType?: string;
+  ToplistType?: string;
 };
 
 const components = {
   Wrapper: styled.div`
-    width: 300px;
-    height: 370px;
-    border: 1px solid #fdfdfd;
+    width: 320px;
   `,
   Title: styled.div`
-    flex-basis: 70px;
     height: 70px;
     justify-content: space-between;
 
@@ -29,7 +28,14 @@ const components = {
       background-repeat: no-repeat;
       height: 100%;
       display: inline-block;
-      width: 200px;
+      width: 180px;
+    }
+    .update-date {
+      font-size: 0.9em;
+      color: #ffffffd1;
+      align-self: flex-end;
+      margin-left: -15px;
+      margin-bottom: 5px;
     }
     .play {
       font-size: 32px;
@@ -42,16 +48,14 @@ const components = {
     }
   `,
   Body: styled.div`
-    height: 300px;
-    flex: 1;
-    background-color: #f2f2f2;
+    min-height: 270px;
   `,
   Footer: styled.div`
     text-align: right;
     padding: 0 10px;
-    flex-basis: 30px;
+    height: 30px;
     line-height: 30px;
-    background-color: #f2f2f2;
+    background-color: #f8f8f8;
     .link {
       color: #b4b4b4;
       &:hover {
@@ -60,34 +64,119 @@ const components = {
     }
   `,
   TrackItem: styled.div`
-    line-height: 30px;
     height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
     .index {
       color: gray;
-      font-size: 16px;
+      font-size: 1.3em;
       &-top {
         color: red;
       }
     }
+    .t-name,
+    .at-name {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .red {
+      color: red;
+    }
+    .blue {
+      color: blue;
+    }
+  `,
+  TrackStatus: styled.span`
+    font-size: 0.9em;
+    margin-left: 5px;
   `
 };
 
 function TopList(prop: TopListProp) {
   const [detail, setDetail] = useState<any>({});
+  const [artists, setArtists] = useState<any[]>([]);
+  const [updateDate, setUpdateDate] = useState(
+    dateFormat(prop.trackUpdateTime, "MM月dd日")
+  );
   const playListService = new PlayListService();
+  const rankService = new RankService();
 
   useEffect(() => {
-    playListService
-      .getDetail(new RequestParams({ id: prop.id }))
-      .subscribe(data => {
-        setDetail(data.playlist);
+    if (prop.ToplistType) {
+      playListService
+        .getDetail(new RequestParams({ id: prop.id }))
+        .subscribe(data => {
+          setDetail(data.playlist);
+          setUpdateDate(dateFormat(data.playlist.trackUpdateTime, "MM月dd日"));
+        });
+    } else {
+      rankService.getTopArtists(new RequestParams()).subscribe(data => {
+        const { list } = data;
+        setArtists(list.artists);
+        setUpdateDate(dateFormat(list.updateTime, "MM月dd日"));
       });
-  }, [prop.id]);
+    }
+  }, [prop.ToplistType]);
 
-  const topTenTracks = (detail.tracks || []).slice(0, 9) as any[];
+  /**
+   * 歌曲数据行
+   */
+  function getTopTrackList() {
+    const tracks = (detail.tracks || []) as any[];
+    return tracks.slice(0, 9).map((item, index) => {
+      const arNames = item.ar.map(x => x.name).join("/");
+      let status = "-";
+      if (prop.ToplistType === "S") {
+        const trackIdItem = detail.trackIds.find(x => x.id === item.id);
+        if (!trackIdItem) return;
+        status = trackIdItem.ratio + "%";
+      }
+      return (
+        <ListItem
+          key={index}
+          index={index}
+          tName={item.name}
+          cName={arNames}
+          status={<components.TrackStatus>{status}</components.TrackStatus>}
+        ></ListItem>
+      );
+    });
+  }
+
+  /**
+   * 歌手数据行
+   */
+  function getTopArtists() {
+    return artists.splice(0, 9).map((item, index) => {
+      let status = "-";
+      let statusClassName = "";
+
+      if (item.lastRank > index) {
+        status = "↑";
+        statusClassName = "red";
+      } else if (item.lastRank < index) {
+        status = "↓";
+        statusClassName = "blue";
+      }
+
+      return (
+        <ListItem
+          key={index}
+          index={index}
+          tName={item.name}
+          status={
+            <components.TrackStatus className={statusClassName}>
+              {status}
+            </components.TrackStatus>
+          }
+        ></ListItem>
+      );
+    });
+  }
 
   return (
-    <components.Wrapper className="flex-column">
+    <components.Wrapper>
       <components.Title
         className="flex-row align-items-center"
         style={{
@@ -100,18 +189,15 @@ function TopList(prop: TopListProp) {
             backgroundImage: `url(${prop.coverImgUrl})`
           }}
         ></div>
-        <Icon className="play" type="play-circle" />
+        <div className="update-date">{updateDate + "更新"}</div>
+        {prop.ToplistType ? (
+          <Icon className="play" type="play-circle" />
+        ) : (
+          <span />
+        )}
       </components.Title>
-      <components.Body>
-        {topTenTracks.map((item, index) => (
-          <TrackItem
-            key={index}
-            index={index}
-            tName={item.name}
-            cName={item.ar.name}
-            listType={prop.listType}
-          ></TrackItem>
-        ))}
+      <components.Body className="stripe">
+        {prop.ToplistType ? getTopTrackList() : getTopArtists()}
       </components.Body>
       <components.Footer>
         <a href="#" className="link">
@@ -122,16 +208,18 @@ function TopList(prop: TopListProp) {
   );
 }
 
-function TrackItem(prop) {
-  let cssClassName = "flex-basis-1 text-right index";
+function ListItem(prop) {
+  let cssClassName = "index";
   if (prop.index < 3) cssClassName += " index-top";
   return (
-    <components.TrackItem className="flex-row">
-      <div className={cssClassName}>{prop.index + 1}</div>
-      <div className="status text-center flex-basis-1">-</div>
+    <components.TrackItem className="flex-row track-item">
+      <div className="flex-basis-2">
+        <span className={cssClassName}>{prop.index + 1}</span>
+        {prop.status}
+      </div>
       <div className="t-name flex-basis-7">{prop.tName}</div>
-      <div className="at-name text-right flex-basis-3">
-        {prop.listType ? prop.cName : ""}
+      <div className="at-name text-right flex-basis-3" title={prop.cName}>
+        {prop.cName}
       </div>
     </components.TrackItem>
   );

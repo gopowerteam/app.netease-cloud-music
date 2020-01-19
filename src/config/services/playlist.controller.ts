@@ -13,5 +13,11 @@ export const PlayListController: ControllerConfig = {
     controller,
     action: 'detail',
     type: RequestMethod.Get
+  },
+  // 获取歌单收藏者
+  subscribers: {
+    controller,
+    action: 'subscribers',
+    type: RequestMethod.Get
   }
 }

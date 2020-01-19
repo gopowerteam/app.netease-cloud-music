@@ -164,7 +164,10 @@ export class SongList extends Component<SongListProps, SongListState> {
           <PlayListCommentList id={playlist.id}></PlayListCommentList>
         </Tabs.TabPane>
         <Tabs.TabPane tab="收藏者" key="3">
-          <CollectorList id={playlist.id}></CollectorList>
+          <CollectorList
+            id={playlist.id}
+            count={playlist.subscribedCount}
+          ></CollectorList>
         </Tabs.TabPane>
       </Tabs>
     );
@@ -176,7 +179,6 @@ export class SongList extends Component<SongListProps, SongListState> {
       .getPlayListDetail(new RequestParams({ id }))
       .subscribe(({ playlist }) => {
         this.setState({ playlist });
-        console.log(playlist);
       });
   }
 }

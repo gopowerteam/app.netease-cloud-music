@@ -7,13 +7,24 @@ import { PlayListController } from '~/config/services/playlist.controller'
  */
 export class PlayListService {
   /**
-   * 查询Banner
+   * 查询歌单
    * @param requestParams
    */
   @Request({
     server: PlayListController.detail
   })
   public getPlayListDetail(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
+
+  /**
+  * 查询Banner
+  * @param requestParams
+  */
+  @Request({
+    server: PlayListController.subscribers
+  })
+  public getPlayListSubscribers(requestParams: RequestParams): Observable<any> {
     return requestParams.request()
   }
 }

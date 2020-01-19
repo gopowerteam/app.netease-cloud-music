@@ -3,19 +3,57 @@ import styled from "styled-components";
 
 const components = {
   Wrapper: styled.section`
-    width: 20%;
+    margin-bottom: 20px;
+    height: 100px;
+    width: 33.3%;
+    overflow: hidden;
     padding: 5px 10px;
     border-radius: 10px;
     position: relative;
     cursor: pointer;
+    display: flex;
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  `,
+  ImgContainer: styled.div`
+    line-height: 100px;
+    position: relative;
+    img {
+      height: 100%;
+      border-radius: 10px;
+    }
+  `,
+  IndexContainer: styled.div`
+    line-height: 100px;
+    padding: 0 10px;
+    color: #b7b7b7;
+  `,
+  InfoContainer: styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-left: 10px;
+
+    .name {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .radio {
+      color: #aeaeae;
+    }
   `
 };
-
 interface RadioItemProps {
   data: {
     id: number;
     picUrl: string;
     name: string;
+    program: any;
   };
 }
 
@@ -26,6 +64,30 @@ export default class RadioItem extends Component<
   RadioItemState
 > {
   public render() {
-    return <components.Wrapper></components.Wrapper>;
+    return (
+      <components.Wrapper>
+        {this.getImgContainer()}
+        {this.getInfoContainer()}
+      </components.Wrapper>
+    );
+  }
+
+  public getImgContainer() {
+    const { data } = this.props;
+    return (
+      <components.ImgContainer>
+        <img alt="" src={data.picUrl}></img>
+      </components.ImgContainer>
+    );
+  }
+
+  public getInfoContainer() {
+    const { data } = this.props;
+    return (
+      <components.InfoContainer>
+        <div className="name">{data.name}</div>
+        <div className="radio">{data.program.radio.name}</div>
+      </components.InfoContainer>
+    );
   }
 }

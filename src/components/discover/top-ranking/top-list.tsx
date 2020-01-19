@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { RankType } from "./rank-song.config";
-import { RankService } from "~/services/rank.service";
 import { RequestParams } from "~/core/http";
 import { Icon } from "antd";
+import { PlayListService } from "~/services/play-list.service";
 
 type TopListProp = {
-  idx: string;
+  id: string;
+  trackUpdateTime: number;
+  coverImgUrl: string;
+  listType?: string;
 };
 
 const components = {
@@ -60,13 +62,9 @@ const components = {
   TrackItem: styled.div`
     line-height: 30px;
     height: 30px;
-
-    padding: 0 10px;
-
     .index {
       color: gray;
       font-size: 16px;
-      margin-right: 10px;
       &-top {
         color: red;
       }
@@ -75,50 +73,45 @@ const components = {
 };
 
 function TopList(prop: TopListProp) {
-  const isSongRank = !!prop.idx;
-
-  const [list, updateList] = useState(new Array<any>());
-  const [background, updateBackground] = useState(
-    "http://p2.music.126.net/N2HO5xfYEqyQ8q6oxCw8IQ==/18713687906568048.jpg"
-  );
-  const rankSongService = new RankService();
+  const [detail, setDetail] = useState<any>({});
+  const playListService = new PlayListService();
 
   useEffect(() => {
-    // rankSongService
-    //   .getTopSongList(new RequestParams({ idx: prop.idx }))
-    //   .subscribe(data => {
-    //     updateList(data.playlist.tracks);
-    //     updateBackground(data.playlist.coverImgUrl);
-    //   });
-  }, [prop.idx]);
+    playListService
+      .getDetail(new RequestParams({ id: prop.id }))
+      .subscribe(data => {
+        setDetail(data.playlist);
+      });
+  }, [prop.id]);
+
+  const topTenTracks = (detail.tracks || []).slice(0, 9) as any[];
 
   return (
     <components.Wrapper className="flex-column">
       <components.Title
         className="flex-row align-items-center"
         style={{
-          backgroundImage: `url(${background})`
+          backgroundImage: `url(${prop.coverImgUrl})`
         }}
       >
         <div
           className="title-bg"
           style={{
-            backgroundImage: `url(${background})`
+            backgroundImage: `url(${prop.coverImgUrl})`
           }}
         ></div>
         <Icon className="play" type="play-circle" />
       </components.Title>
       <components.Body>
-        {list.slice(0, 9).map((item, index) => {
-          let itemClassName = "index";
-          if (index < 3) itemClassName += " index-top";
-          return (
-            <components.TrackItem key={item.id}>
-              <span className={itemClassName}>{index + 1}</span>
-              {item.name}
-            </components.TrackItem>
-          );
-        })}
+        {topTenTracks.map((item, index) => (
+          <TrackItem
+            key={index}
+            index={index}
+            tName={item.name}
+            cName={item.ar.name}
+            listType={prop.listType}
+          ></TrackItem>
+        ))}
       </components.Body>
       <components.Footer>
         <a href="#" className="link">
@@ -126,6 +119,21 @@ function TopList(prop: TopListProp) {
         </a>
       </components.Footer>
     </components.Wrapper>
+  );
+}
+
+function TrackItem(prop) {
+  let cssClassName = "flex-basis-1 text-right index";
+  if (prop.index < 3) cssClassName += " index-top";
+  return (
+    <components.TrackItem className="flex-row">
+      <div className={cssClassName}>{prop.index + 1}</div>
+      <div className="status text-center flex-basis-1">-</div>
+      <div className="t-name flex-basis-7">{prop.tName}</div>
+      <div className="at-name text-right flex-basis-3">
+        {prop.listType ? prop.cName : ""}
+      </div>
+    </components.TrackItem>
   );
 }
 

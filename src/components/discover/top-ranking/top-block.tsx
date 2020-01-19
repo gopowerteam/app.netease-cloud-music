@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Icon } from "antd";
-import { RankService } from "~/services/rank.service";
-import { RequestParams } from "~/core/http";
+import { tenThoursand } from "~/utils/filter";
 
 type TopBlockProp = {
   name: string;
-  idx: string;
+  id: string;
+  playCount: number;
+  coverImgUrl: string;
 };
 
 const components = {
@@ -59,31 +60,19 @@ const components = {
   `
 };
 
+/**
+ * 排行榜歌单 Block
+ * @param prop TopBlockProp
+ */
 export default function TopBlock(prop: TopBlockProp) {
-  const rankService = new RankService();
-
-  const [tracks, updateTracks] = useState(new Array<any>());
-  const [playCount, updatePlayCount] = useState("0");
-  const [coverImgUrl, updateImageUrl] = useState(
-    "http://p1.music.126.net/8-GBrukQ3BHhs4CmK6qE4w==/109951163424197392.jpg"
-  );
-
-  useEffect(() => {
-    // rankService
-    //   .getTopSongList(new RequestParams({ idx: prop.idx }))
-    //   .subscribe(data => {
-    //     updateImageUrl(data.playlist.coverImgUrl);
-    //     updateTracks(data.playlist.tracks);
-    //     updatePlayCount((data.playlist.playCount / 10000).toFixed(0));
-    //   });
-  }, [prop.idx]);
-
   return (
     <components.wrap>
-      <components.content style={{ backgroundImage: `url(${coverImgUrl})` }}>
+      <components.content
+        style={{ backgroundImage: `url(${prop.coverImgUrl})` }}
+      >
         <div className="title">
           <Icon type="customer-service" style={{ marginRight: "10px" }} />
-          {playCount}万
+          {tenThoursand(prop.playCount)}
         </div>
         <Icon className="play" type="play-circle" />
       </components.content>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TopList from "~/components/discover/top-ranking/top-list";
-import { RankTypeConfig } from "~/components/discover/top-ranking/rank-song.config";
 import { RankService } from "~/services/rank.service";
 import { RequestParams } from "~/core/http";
 import TopBlock from "~/components/discover/top-ranking/top-block";
@@ -29,24 +28,34 @@ const component = {
 export default function TopRanking() {
   const rankService = new RankService();
 
+  const [topList, setTopList] = useState<any[]>([]);
+
+  useEffect(() => {
+    rankService.getTopList(new RequestParams()).subscribe(data => {
+      setTopList(data.list);
+    });
+  });
+
+  function getOfficialList() {
+    return topList
+      .filter(x => x.ToplistType)
+      .map(item => {
+        return <TopList key={item.id} {...item}></TopList>;
+      });
+  }
+
+  function getGlobalTopList() {
+    return topList
+      .filter(x => !x.ToplistType)
+      .map(item => <TopBlock key={item.id} {...item}></TopBlock>);
+  }
+
   return (
     <>
       <component.Title>官方榜</component.Title>
-      <component.Official>{getTopList()}</component.Official>
+      <component.Official>{getOfficialList()}</component.Official>
       <component.Title>全球榜</component.Title>
-      <component.AnyTop>{getTopBlock()}</component.AnyTop>
+      <component.AnyTop>{getGlobalTopList()}</component.AnyTop>
     </>
   );
-
-  function getTopList() {
-    return RankTypeConfig.filter(x => x.type).map(item => {
-      return <TopList key={item.value} idx={item.value}></TopList>;
-    });
-  }
-
-  function getTopBlock() {
-    return RankTypeConfig.filter(x => !x.type).map(item => (
-      <TopBlock key={item.value} idx={item.value} name={item.name}></TopBlock>
-    ));
-  }
 }

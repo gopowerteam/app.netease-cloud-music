@@ -14,7 +14,7 @@ export const TopController: ControllerConfig = {
   /**
    * 排行项目列表
    */
-  rankItems: {
+  topList: {
     controller: "toplist",
     type: RequestMethod.Get
   }

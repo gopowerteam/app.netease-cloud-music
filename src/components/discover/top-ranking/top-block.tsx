@@ -11,13 +11,13 @@ type TopBlockProp = {
 };
 
 const components = {
-  wrap: styled.div`
+  Wrapper: styled.div`
     position: relative;
     &:hover {
       cursor: pointer;
     }
   `,
-  content: styled.div`
+  Content: styled.div`
     height: 150px;
     width: 150px;
     border: solid 1px #f2f2f2;
@@ -53,7 +53,7 @@ const components = {
       }
     }
   `,
-  footer: styled.div`
+  Footer: styled.div`
     line-height: 20px;
     height: 20px;
     font-size: 12px;
@@ -66,8 +66,8 @@ const components = {
  */
 export default function TopBlock(prop: TopBlockProp) {
   return (
-    <components.wrap>
-      <components.content
+    <components.Wrapper>
+      <components.Content
         style={{ backgroundImage: `url(${prop.coverImgUrl})` }}
       >
         <div className="title">
@@ -75,8 +75,8 @@ export default function TopBlock(prop: TopBlockProp) {
           {tenThoursand(prop.playCount)}
         </div>
         <Icon className="play" type="play-circle" />
-      </components.content>
-      <components.footer>{prop.name}</components.footer>
-    </components.wrap>
+      </components.Content>
+      <components.Footer>{prop.name}</components.Footer>
+    </components.Wrapper>
   );
 }

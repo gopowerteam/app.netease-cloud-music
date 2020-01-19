@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { useParams, withRouter } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { PlayListService } from "~/services/playlist.service";
 import { RequestParams } from "~/core/http";
-import { Row, Avatar, Button } from "antd";
+import { Avatar, Button, Tabs } from "antd";
 import moment from "moment";
 import { convertPlayCount } from "~/shared/utils/common";
+import MusicList from "~/components/shared/music-list";
+import { PlayListCommentList } from "~/components/shared/comment-list";
+import CollectorList from "~/components/shared/collector-list";
 
 const components = {
   Wrapper: styled.section``,
@@ -85,15 +88,18 @@ export class SongList extends Component<SongListProps, SongListState> {
   }
 
   public render() {
-    return <components.Wrapper>{this.getHeaderContainer()}</components.Wrapper>;
+    const { playlist } = this.state;
+
+    return (
+      <components.Wrapper>
+        {playlist && this.getHeaderContainer()}
+        {playlist && this.getTabsContainer()}
+      </components.Wrapper>
+    );
   }
 
   public getHeaderContainer() {
     const { playlist } = this.state;
-
-    if (!playlist) {
-      return <div></div>;
-    }
 
     return (
       <components.HeaderWrapper className="flex-row">
@@ -143,6 +149,24 @@ export class SongList extends Component<SongListProps, SongListState> {
           </div>
         </div>
       </components.HeaderWrapper>
+    );
+  }
+
+  private getTabsContainer() {
+    const { playlist } = this.state;
+
+    return (
+      <Tabs>
+        <Tabs.TabPane tab="歌曲列表" key="1">
+          <MusicList id={playlist.id}></MusicList>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab={`评论 (${playlist.commentCount})`} key="2">
+          <PlayListCommentList id={playlist.id}></PlayListCommentList>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="收藏者" key="3">
+          <CollectorList id={playlist.id}></CollectorList>
+        </Tabs.TabPane>
+      </Tabs>
     );
   }
 

@@ -6,6 +6,9 @@ import { RouterStore } from "../../../store/router.store";
 import menuList from "../../../assets/json/menu.json";
 
 const components = {
+  Wrapper: styled.section`
+    -webkit-app-region: drag;
+  `,
   HistoryWrap: styled.div`
     flex-basis: 200px;
     display: flex;
@@ -67,12 +70,12 @@ export default class Header extends Component<{}, HeaderState> {
 
   public render() {
     return (
-      <section className="full-absolute flex-row align-items-center">
+      <components.Wrapper className="full-absolute flex-row align-items-center">
         {this.getHistoryContainer()}
         {this.getMenuContainer()}
         {this.getSearchContainer()}
         {this.getToolbarContainer()}
-      </section>
+      </components.Wrapper>
     );
   }
 
@@ -130,7 +133,7 @@ export default class Header extends Component<{}, HeaderState> {
 
   public getMenuChildren(location) {
     const target = menuList.find(x => x.path === location.pathname);
-    
+
     if (!target) return [];
 
     if (target.level === 1) {

@@ -6,6 +6,7 @@ import { RequestParams } from "~/core/http";
 import TopBlock from "~/components/discover/top-ranking/top-block";
 
 const component = {
+  Wrapper: styled.section``,
   Title: styled.div`
     height: 40px;
     font-size: 20px;
@@ -27,46 +28,76 @@ const component = {
   `
 };
 
-export default function TopRanking() {
-  const rankService = new RankService();
-
-  const [topList, setTopList] = useState<any[]>([]);
-  const [artistTop, setArtistTop] = useState<any>({});
-
-  useEffect(() => {
-    rankService.getTopList(new RequestParams()).subscribe(data => {
-      setTopList(data.list);
-      setArtistTop(data.artistToplist);
-    });
-  }, [topList.length]);
-
-  function getOfficialList() {
-    const artistInfo = {
-      id: "xx",
-      trackUpdateTime: Date.now(),
-      coverImgUrl: artistTop.coverUrl
+type RankState = {
+  topList: any[];
+  artistTop: any;
+};
+export default class TopRanking extends React.Component<any, RankState> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      topList: [],
+      artistTop: null
     };
+  }
 
-    return topList
+  public componentDidMount() {
+    this.queryTopList();
+  }
+
+  public render() {
+    return (
+      <component.Wrapper>
+        <component.Title>官方榜</component.Title>
+        <component.Official>{this.getOfficialList()}</component.Official>
+        <component.Title>全球榜</component.Title>
+        <component.AnyTop>{this.getGlobalTopList()}</component.AnyTop>
+      </component.Wrapper>
+    );
+  }
+
+  /**
+   * 生成官方榜
+   */
+  private getOfficialList() {
+    if (!this.state.topList.length) {
+      return <div></div>;
+    }
+
+    return this.state.topList
       .filter(x => x.ToplistType)
-      .concat(artistInfo)
+      .concat(this.state.artistTop)
       .map(item => {
         return <TopList key={item.id} {...item}></TopList>;
       });
   }
 
-  function getGlobalTopList() {
-    return topList
+  /**
+   * 生成全球榜
+   */
+  private getGlobalTopList() {
+    if (!this.state.topList) {
+      return <div></div>;
+    }
+    return this.state.topList
       .filter(x => !x.ToplistType)
       .map(item => <TopBlock key={item.id} {...item}></TopBlock>);
   }
 
-  return (
-    <>
-      <component.Title>官方榜</component.Title>
-      <component.Official>{getOfficialList()}</component.Official>
-      <component.Title>全球榜</component.Title>
-      <component.AnyTop>{getGlobalTopList()}</component.AnyTop>
-    </>
-  );
+  /**
+   * 查询排行榜
+   */
+  private queryTopList() {
+    const rankService = new RankService();
+    rankService.getTopList(new RequestParams()).subscribe(data => {
+      this.setState({
+        topList: data.list,
+        artistTop: {
+          id: "XX",
+          trackUpdateTime: Date.now(),
+          coverImgUrl: data.artistToplist.coverUrl
+        }
+      });
+    });
+  }
 }

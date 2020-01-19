@@ -1,6 +1,5 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useState } from "react";
 import styled from "styled-components";
-import { render } from "react-dom";
 import { BannerService } from "~/services/banner.service";
 import { RequestParams } from "~/core/http";
 
@@ -24,10 +23,10 @@ class CommentList extends Component<CommentListProps, CommentListState> {
 export function PlayListCommentList(props) {
   const [comments, updateComments] = useState<any[]>([]);
   const bannerService = new BannerService();
-  // bannerService.getBanner(new RequestParams()).subscribe(data => {
-  //   console.log(333)
-  //   updateComments([1, 23]);
-  // });
+  bannerService.getBanner(new RequestParams()).subscribe(data => {
+    updateComments([1, 23]);
+  });
+
   return <CommentList data={comments}></CommentList>;
 }
 

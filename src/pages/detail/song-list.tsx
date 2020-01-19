@@ -104,7 +104,7 @@ export class SongList extends Component<SongListProps, SongListState> {
     return (
       <components.HeaderWrapper className="flex-row">
         <div>
-          <img className="coverImg" src={playlist.coverImgUrl}></img>
+          <img alt="" className="coverImg" src={playlist.coverImgUrl}></img>
         </div>
         <div className="flex-auto padding-left info">
           <div className="title">
@@ -158,7 +158,7 @@ export class SongList extends Component<SongListProps, SongListState> {
     return (
       <Tabs>
         <Tabs.TabPane tab="歌曲列表" key="1">
-          <MusicList id={playlist.id}></MusicList>
+          <MusicList ids={playlist.trackIds.map(x => x.id)}></MusicList>
         </Tabs.TabPane>
         <Tabs.TabPane tab={`评论 (${playlist.commentCount})`} key="2">
           <PlayListCommentList id={playlist.id}></PlayListCommentList>

@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Provider as StoreProvider, useStore } from "reto";
-import { useParams } from "react-router-dom";
+import { Provider as StoreProvider } from "reto";
 
 export function RouterStore() {
   const { hash, search, pathname } = window.location;

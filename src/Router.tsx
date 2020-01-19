@@ -13,8 +13,7 @@ import { useStore } from "reto";
 import { RouterStore } from "./store/router.store";
 import Index from "./pages";
 import SongListDetail from "./pages/detail/song-list";
-
-
+import TopRanking from "./pages/discover/top-ranking";
 
 function RouterContainer() {
   // 安装useLocation
@@ -35,6 +34,7 @@ function RouterContainer() {
         <Redirect push to="/discover/recommend"></Redirect>
       </Route>
       <Route path="/discover/recommend" children={<Recommend />}></Route>
+      <Route path="/discover/ranking" children={<TopRanking />}></Route>
       <Route path="/fm" children={<Index />}></Route>
       <Route path="/detail/song-list/:id" children={<SongListDetail />}></Route>
     </Switch>

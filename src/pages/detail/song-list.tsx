@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { useParams, withRouter } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { PlayListService } from "~/services/playlist.service";
 import { RequestParams } from "~/core/http";
-import { Row, Avatar, Button } from "antd";
-import moment from "moment";
+import { Avatar, Button, Tabs } from "antd";
 import { convertPlayCount } from "~/shared/utils/common";
+import MusicList from "~/components/shared/music-list";
+import { PlayListCommentList } from "~/components/shared/comment-list";
+import CollectorList from "~/components/shared/collector-list";
+import { dateFormat } from "~/utils/filter";
 
 const components = {
   Wrapper: styled.section``,
@@ -85,20 +88,23 @@ export class SongList extends Component<SongListProps, SongListState> {
   }
 
   public render() {
-    return <components.Wrapper>{this.getHeaderContainer()}</components.Wrapper>;
+    const { playlist } = this.state;
+
+    return (
+      <components.Wrapper>
+        {playlist && this.getHeaderContainer()}
+        {playlist && this.getTabsContainer()}
+      </components.Wrapper>
+    );
   }
 
   public getHeaderContainer() {
     const { playlist } = this.state;
 
-    if (!playlist) {
-      return <div></div>;
-    }
-
     return (
       <components.HeaderWrapper className="flex-row">
         <div>
-          <img className="coverImg" src={playlist.coverImgUrl}></img>
+          <img alt="" className="coverImg" src={playlist.coverImgUrl}></img>
         </div>
         <div className="flex-auto padding-left info">
           <div className="title">
@@ -113,7 +119,7 @@ export class SongList extends Component<SongListProps, SongListState> {
             ></Avatar>
             <a className="nickname">{playlist.creator.nickname}</a>
             <span className="create-time">
-              {moment(playlist.createTime).format("YYYY-MM-DD")}创建
+              {dateFormat(playlist.createTime)} 创建
             </span>
           </div>
           <div className="action">
@@ -146,13 +152,33 @@ export class SongList extends Component<SongListProps, SongListState> {
     );
   }
 
+  private getTabsContainer() {
+    const { playlist } = this.state;
+
+    return (
+      <Tabs>
+        <Tabs.TabPane tab="歌曲列表" key="1">
+          <MusicList ids={playlist.trackIds.map(x => x.id)}></MusicList>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab={`评论 (${playlist.commentCount})`} key="2">
+          <PlayListCommentList id={playlist.id}></PlayListCommentList>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="收藏者" key="3">
+          <CollectorList
+            id={playlist.id}
+            count={playlist.subscribedCount}
+          ></CollectorList>
+        </Tabs.TabPane>
+      </Tabs>
+    );
+  }
+
   private getSongListDetail() {
     const { id } = this.props;
     this.playListService
       .getPlayListDetail(new RequestParams({ id }))
       .subscribe(({ playlist }) => {
         this.setState({ playlist });
-        console.log(playlist);
       });
   }
 }

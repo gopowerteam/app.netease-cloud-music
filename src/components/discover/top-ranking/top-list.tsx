@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { RequestParams } from "~/core/http";
 import { Icon } from "antd";
-import { PlayListService } from "~/services/play-list.service";
+import { PlayListService } from "~/services/playlist.service";
 import { dateFormat } from "~/utils/filter";
 import { RankService } from "~/services/rank.service";
+import { Link } from "react-router-dom";
 
 type TopListProp = {
   id: string;
@@ -22,9 +23,12 @@ type TopListState = {
 const components = {
   Wrapper: styled.div`
     width: 320px;
+    height: 370px;
+    border: solid 1px #f2f2f2;
   `,
   Title: styled.div`
-    height: 70px;
+    height: 100px;
+    flex-basis: 100px;
     justify-content: space-between;
 
     background-color: #6597e7;
@@ -54,7 +58,8 @@ const components = {
     }
   `,
   Body: styled.div`
-    min-height: 270px;
+    flex: 1;
+    line-height: 30px;
   `,
   Footer: styled.div`
     text-align: right;
@@ -70,10 +75,9 @@ const components = {
     }
   `,
   TrackItem: styled.div`
-    height: 30px;
-    line-height: 30px;
     padding: 0 10px;
     .index {
+      width: 10px;
       color: gray;
       font-size: 1.3em;
       &-top {
@@ -86,11 +90,31 @@ const components = {
       text-overflow: ellipsis;
       overflow: hidden;
     }
-    .red {
-      color: red;
+
+    .t-name {
+      flex: 1;
     }
-    .blue {
-      color: blue;
+    .at-name {
+      width: 75px;
+      text-align: right;
+    }
+
+    .status {
+      width: 30px;
+      text-align: center;
+      &.red {
+        color: red;
+      }
+      &.blue {
+        color: blue;
+      }
+      &.small {
+        font-size: 0.8em;
+      }
+      &.green {
+        font-size: 0.8em;
+        color: green;
+      }
     }
   `,
   TrackStatus: styled.span`
@@ -128,18 +152,27 @@ export default class TopList extends React.Component<
           updateDate={this.state.updateDate}
           hiddenPlay={!this.props.ToplistType}
         ></RankTitle>
+        {this.props.ToplistType ? (
+          <TrackList
+            {...this.state.detail}
+            listType={this.props.ToplistType}
+            id={this.props.id}
+          ></TrackList>
+        ) : (
+          <ArtistsList artists={this.state.artists}></ArtistsList>
+        )}
       </components.Wrapper>
     );
   }
 
   private queryTrackList() {
     new PlayListService()
-      .getDetail(new RequestParams({ id: this.props.id }))
+      .getPlayListDetail(new RequestParams({ id: this.props.id }))
       .subscribe(data => {
         this.setState({
           detail: {
-            tracks: data.playlist.tracks.slice(0, 9),
-            trackIds: data.playlist.trackIds.slice(0, 9)
+            tracks: data.playlist.tracks.slice(0, 8),
+            trackIds: data.playlist.trackIds.slice(0, 8)
           },
           updateDate: data.playlist.updateTime
         });
@@ -149,7 +182,7 @@ export default class TopList extends React.Component<
   private queryArtistList() {
     new RankService().getTopArtists(new RequestParams()).subscribe(data => {
       this.setState({
-        artists: data.list.artists.slice(0, 9),
+        artists: data.list.artists.slice(0, 8),
         updateDate: data.updateTime
       });
     });
@@ -185,7 +218,7 @@ class RankTitle extends React.Component<{
         <div className="update-date">{this.updateDateStr}</div>
 
         {this.props.hiddenPlay ? (
-          <span></span>
+          <span />
         ) : (
           <Icon className="play" type="play-circle" />
         )}
@@ -194,13 +227,69 @@ class RankTitle extends React.Component<{
   }
 }
 
-class TrackList extends React.Component<{ tracks: any[]; trackIds: any[] }> {
+class TrackList extends React.Component<{
+  tracks: any[];
+  trackIds: any[];
+  listType: string;
+  id: string;
+}> {
   constructor(props) {
     super(props);
   }
 
   public render() {
-    return <components.Body></components.Body>;
+    if (!this.props.tracks) {
+      return <NoData></NoData>;
+    }
+    return (
+      <components.Body className="stripe">
+        {this.props.tracks.map((item, index) => {
+          let cssName = "status";
+          let status = "-";
+          const trackIdInfo =
+            this.props.trackIds.find(x => x.id === item.id) || {};
+          const atName = item.ar.map(x => x.name).join("/");
+
+          switch (this.props.listType) {
+            case "S":
+              cssName += " small";
+              status = trackIdInfo.ratio + "%";
+              break;
+            case "N":
+            case "O":
+            case "H":
+              const o_lr = trackIdInfo.lr;
+              if (!o_lr) {
+                status = "new";
+                cssName += " green";
+              } else if (o_lr > index) {
+                status = "↑";
+                cssName += " red";
+              } else if (o_lr < index) {
+                status = "↓";
+                cssName += " blue";
+              }
+              break;
+          }
+
+          return (
+            <components.TrackItem key={index} className="flex-row">
+              <div className={getIndexClassName(index)}>{index + 1}</div>
+              <div className={cssName}>{status}</div>
+              <div className="t-name">{item.name}</div>
+              <div className="at-name" title={atName}>
+                {atName}
+              </div>
+            </components.TrackItem>
+          );
+        })}
+        <components.Footer>
+          <Link to={`/detail/song-list/${this.props.id}`} className="link">
+            查看更多>
+          </Link>
+        </components.Footer>
+      </components.Body>
+    );
   }
 }
 
@@ -209,36 +298,36 @@ class ArtistsList extends React.Component<{ artists: any[] }> {
     super(props);
   }
 
-  public getIndexClassName(index: number) {
-    let name = "index";
-    if (index < 3) name += " index-top";
-  }
-
   public render() {
-    if (!this.props.artists.length) {
+    if (!this.props.artists) {
       return <NoData></NoData>;
     }
 
     return (
-      <components.Body>
+      <components.Body className="stripe">
         {this.props.artists.map((item, index) => {
-          let cssName = "";
+          let cssName = "status";
           let status = "-";
           if (item.lastRank < index) {
             status = "↓";
-            cssName = "blue";
+            cssName += " blue";
           } else if (item.lastRank > index) {
             status = "↑";
-            cssName = "red";
+            cssName += " red";
           }
           return (
-            <components.TrackItem key={index}>
+            <components.TrackItem key={index} className="flex-row">
               <div className={getIndexClassName(index)}>{index + 1}</div>
               <div className={cssName}>{status}</div>
               <div>{item.name}</div>
             </components.TrackItem>
           );
         })}
+        <components.Footer>
+          <a href="#" className="link">
+            查看更多>
+          </a>
+        </components.Footer>
       </components.Body>
     );
   }

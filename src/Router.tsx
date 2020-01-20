@@ -34,7 +34,7 @@ function RouterContainer() {
         <Redirect push to="/discover/recommend"></Redirect>
       </Route>
       <Route path="/discover/recommend" children={<Recommend />}></Route>
-      <Route path="/discover/rank" children={<TopRanking />}></Route>
+      <Route path="/discover/ranking" children={<TopRanking />}></Route>
       <Route path="/fm" children={<Index />}></Route>
       <Route path="/detail/song-list/:id" children={<SongListDetail />}></Route>
     </Switch>

@@ -1,16 +1,15 @@
 import { RequestMethod } from "../../core/http";
 import { ControllerConfig } from "../type.config";
 
-const Controller = "playlist";
+const Controller = "song";
 
 /**
- * 歌单接口配置
+ * 歌曲接口配置
  */
-export const PlayListController: ControllerConfig = {
-  // 排行榜
+export const SongController: ControllerConfig = {
   detail: {
     controller: Controller,
-    action: "detail",
+    action: 'detail',
     type: RequestMethod.Get
   }
 };

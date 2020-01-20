@@ -4,11 +4,11 @@ import { useParams } from "react-router-dom";
 import { PlayListService } from "~/services/playlist.service";
 import { RequestParams } from "~/core/http";
 import { Avatar, Button, Tabs } from "antd";
-import moment from "moment";
 import { convertPlayCount } from "~/shared/utils/common";
 import MusicList from "~/components/shared/music-list";
 import { PlayListCommentList } from "~/components/shared/comment-list";
 import CollectorList from "~/components/shared/collector-list";
+import { dateFormat } from "~/utils/filter";
 
 const components = {
   Wrapper: styled.section``,
@@ -119,7 +119,7 @@ export class SongList extends Component<SongListProps, SongListState> {
             ></Avatar>
             <a className="nickname">{playlist.creator.nickname}</a>
             <span className="create-time">
-              {moment(playlist.createTime).format("YYYY-MM-DD")}创建
+              {dateFormat(playlist.createTime)} 创建
             </span>
           </div>
           <div className="action">

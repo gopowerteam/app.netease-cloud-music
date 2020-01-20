@@ -62,21 +62,30 @@ const components = {
 
 /**
  * 排行榜歌单 Block
- * @param prop TopBlockProp
  */
-export default function TopBlock(prop: TopBlockProp) {
-  return (
-    <components.Wrapper>
-      <components.Content
-        style={{ backgroundImage: `url(${prop.coverImgUrl})` }}
-      >
-        <div className="title">
-          <Icon type="customer-service" style={{ marginRight: "10px" }} />
-          {tenThoursand(prop.playCount)}
-        </div>
-        <Icon className="play" type="play-circle" />
-      </components.Content>
-      <components.Footer>{prop.name}</components.Footer>
-    </components.Wrapper>
-  );
+export default class TopBlock extends React.Component<TopBlockProp, any> {
+  constructor(props: TopBlockProp) {
+    super(props);
+  }
+
+  private get playCount() {
+    return tenThoursand(this.props.playCount);
+  }
+
+  public render() {
+    return (
+      <components.Wrapper>
+        <components.Content
+          style={{ backgroundImage: `url(${this.props.coverImgUrl})` }}
+        >
+          <div className="title">
+            <Icon type="customer-service" style={{ marginRight: "10px" }} />
+            {this.playCount}
+          </div>
+          <Icon className="play" type="play-circle" />
+        </components.Content>
+        <components.Footer>{this.props.name}</components.Footer>
+      </components.Wrapper>
+    );
+  }
 }

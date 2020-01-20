@@ -5,6 +5,7 @@ import { Icon } from "antd";
 import { PlayListService } from "~/services/playlist.service";
 import { dateFormat } from "~/utils/filter";
 import { RankService } from "~/services/rank.service";
+import { Link } from "react-router-dom";
 
 type TopListProp = {
   id: string;
@@ -13,12 +14,21 @@ type TopListProp = {
   ToplistType?: string;
 };
 
+type TopListState = {
+  detail: any;
+  artists: any;
+  updateDate: number;
+};
+
 const components = {
   Wrapper: styled.div`
     width: 320px;
+    height: 370px;
+    border: solid 1px #f2f2f2;
   `,
   Title: styled.div`
-    height: 70px;
+    height: 100px;
+    flex-basis: 100px;
     justify-content: space-between;
 
     background-color: #6597e7;
@@ -48,7 +58,8 @@ const components = {
     }
   `,
   Body: styled.div`
-    min-height: 270px;
+    flex: 1;
+    line-height: 30px;
   `,
   Footer: styled.div`
     text-align: right;
@@ -64,10 +75,9 @@ const components = {
     }
   `,
   TrackItem: styled.div`
-    height: 30px;
-    line-height: 30px;
     padding: 0 10px;
     .index {
+      width: 10px;
       color: gray;
       font-size: 1.3em;
       &-top {
@@ -80,11 +90,31 @@ const components = {
       text-overflow: ellipsis;
       overflow: hidden;
     }
-    .red {
-      color: red;
+
+    .t-name {
+      flex: 1;
     }
-    .blue {
-      color: blue;
+    .at-name {
+      width: 75px;
+      text-align: right;
+    }
+
+    .status {
+      width: 30px;
+      text-align: center;
+      &.red {
+        color: red;
+      }
+      &.blue {
+        color: blue;
+      }
+      &.small {
+        font-size: 0.8em;
+      }
+      &.green {
+        font-size: 0.8em;
+        color: green;
+      }
     }
   `,
   TrackStatus: styled.span`
@@ -93,136 +123,222 @@ const components = {
   `
 };
 
-function TopList(prop: TopListProp) {
-  const [detail, setDetail] = useState<any>({});
-  const [artists, setArtists] = useState<any[]>([]);
-  const [updateDate, setUpdateDate] = useState(
-    dateFormat(prop.trackUpdateTime, "MM月dd日")
-  );
-  const playListService = new PlayListService();
-  const rankService = new RankService();
+export default class TopList extends React.Component<
+  TopListProp,
+  TopListState
+> {
+  constructor(props: TopListProp) {
+    super(props);
+    this.state = {
+      detail: null,
+      artists: null,
+      updateDate: props.trackUpdateTime
+    };
+  }
 
-  useEffect(() => {
-    if (prop.ToplistType) {
-      playListService
-        .getPlayListDetail(new RequestParams({ id: prop.id }))
-        .subscribe(data => {
-          setDetail(data.playlist);
-          setUpdateDate(dateFormat(data.playlist.trackUpdateTime, "MM月dd日"));
-        });
+  public componentDidMount() {
+    if (this.props.ToplistType) {
+      this.queryTrackList();
     } else {
-      rankService.getTopArtists(new RequestParams()).subscribe(data => {
-        const { list } = data;
-        setArtists(list.artists);
-        setUpdateDate(dateFormat(list.updateTime, "MM月dd日"));
-      });
+      this.queryArtistList();
     }
-  }, [prop.ToplistType]);
-
-  /**
-   * 歌曲数据行
-   */
-  function getTopTrackList() {
-    const tracks = (detail.tracks || []) as any[];
-    return tracks.slice(0, 9).map((item, index) => {
-      const arNames = item.ar.map(x => x.name).join("/");
-      let status = "-";
-      if (prop.ToplistType === "S") {
-        const trackIdItem = detail.trackIds.find(x => x.id === item.id);
-        if (!trackIdItem) return;
-        status = trackIdItem.ratio + "%";
-      }
-      return (
-        <ListItem
-          key={index}
-          index={index}
-          tName={item.name}
-          cName={arNames}
-          status={<components.TrackStatus>{status}</components.TrackStatus>}
-        ></ListItem>
-      );
-    });
   }
 
-  /**
-   * 歌手数据行
-   */
-  function getTopArtists() {
-    return artists.splice(0, 9).map((item, index) => {
-      let status = "-";
-      let statusClassName = "";
-
-      if (item.lastRank > index) {
-        status = "↑";
-        statusClassName = "red";
-      } else if (item.lastRank < index) {
-        status = "↓";
-        statusClassName = "blue";
-      }
-
-      return (
-        <ListItem
-          key={index}
-          index={index}
-          tName={item.name}
-          status={
-            <components.TrackStatus className={statusClassName}>
-              {status}
-            </components.TrackStatus>
-          }
-        ></ListItem>
-      );
-    });
+  public render() {
+    return (
+      <components.Wrapper>
+        <RankTitle
+          coverImgUrl={this.props.coverImgUrl}
+          updateDate={this.state.updateDate}
+          hiddenPlay={!this.props.ToplistType}
+        ></RankTitle>
+        {this.props.ToplistType ? (
+          <TrackList
+            {...this.state.detail}
+            listType={this.props.ToplistType}
+            id={this.props.id}
+          ></TrackList>
+        ) : (
+          <ArtistsList artists={this.state.artists}></ArtistsList>
+        )}
+      </components.Wrapper>
+    );
   }
 
-  return (
-    <components.Wrapper>
+  private queryTrackList() {
+    new PlayListService()
+      .getPlayListDetail(new RequestParams({ id: this.props.id }))
+      .subscribe(data => {
+        this.setState({
+          detail: {
+            tracks: data.playlist.tracks.slice(0, 8),
+            trackIds: data.playlist.trackIds.slice(0, 8)
+          },
+          updateDate: data.playlist.updateTime
+        });
+      });
+  }
+
+  private queryArtistList() {
+    new RankService().getTopArtists(new RequestParams()).subscribe(data => {
+      this.setState({
+        artists: data.list.artists.slice(0, 8),
+        updateDate: data.updateTime
+      });
+    });
+  }
+}
+
+class RankTitle extends React.Component<{
+  coverImgUrl: string;
+  updateDate: number;
+  hiddenPlay?: boolean;
+}> {
+  private updateDateStr = "----";
+
+  constructor(props) {
+    super(props);
+    this.updateDateStr = dateFormat(props.updateDate, "MM月dd日") + "更新";
+  }
+
+  public render() {
+    return (
       <components.Title
         className="flex-row align-items-center"
         style={{
-          backgroundImage: `url(${prop.coverImgUrl})`
+          backgroundImage: `url(${this.props.coverImgUrl})`
         }}
       >
         <div
           className="title-bg"
           style={{
-            backgroundImage: `url(${prop.coverImgUrl})`
+            backgroundImage: `url(${this.props.coverImgUrl})`
           }}
         ></div>
-        <div className="update-date">{updateDate + "更新"}</div>
-        {prop.ToplistType ? (
-          <Icon className="play" type="play-circle" />
-        ) : (
+        <div className="update-date">{this.updateDateStr}</div>
+
+        {this.props.hiddenPlay ? (
           <span />
+        ) : (
+          <Icon className="play" type="play-circle" />
         )}
       </components.Title>
+    );
+  }
+}
+
+class TrackList extends React.Component<{
+  tracks: any[];
+  trackIds: any[];
+  listType: string;
+  id: string;
+}> {
+  constructor(props) {
+    super(props);
+  }
+
+  public render() {
+    if (!this.props.tracks) {
+      return <NoData></NoData>;
+    }
+    return (
       <components.Body className="stripe">
-        {prop.ToplistType ? getTopTrackList() : getTopArtists()}
+        {this.props.tracks.map((item, index) => {
+          let cssName = "status";
+          let status = "-";
+          const trackIdInfo =
+            this.props.trackIds.find(x => x.id === item.id) || {};
+          const atName = item.ar.map(x => x.name).join("/");
+
+          switch (this.props.listType) {
+            case "S":
+              cssName += " small";
+              status = trackIdInfo.ratio + "%";
+              break;
+            case "N":
+            case "O":
+            case "H":
+              const o_lr = trackIdInfo.lr;
+              if (!o_lr) {
+                status = "new";
+                cssName += " green";
+              } else if (o_lr > index) {
+                status = "↑";
+                cssName += " red";
+              } else if (o_lr < index) {
+                status = "↓";
+                cssName += " blue";
+              }
+              break;
+          }
+
+          return (
+            <components.TrackItem key={index} className="flex-row">
+              <div className={getIndexClassName(index)}>{index + 1}</div>
+              <div className={cssName}>{status}</div>
+              <div className="t-name">{item.name}</div>
+              <div className="at-name" title={atName}>
+                {atName}
+              </div>
+            </components.TrackItem>
+          );
+        })}
+        <components.Footer>
+          <Link to={`/detail/song-list/${this.props.id}`} className="link">
+            查看更多>
+          </Link>
+        </components.Footer>
       </components.Body>
-      <components.Footer>
-        <a href="#" className="link">
-          查看全部>
-        </a>
-      </components.Footer>
-    </components.Wrapper>
-  );
+    );
+  }
 }
 
-function ListItem(prop) {
-  let cssClassName = "index";
-  if (prop.index < 3) cssClassName += " index-top";
-  return (
-    <components.TrackItem className="flex-row track-item">
-      <div className="flex-basis-2">
-        <span className={cssClassName}>{prop.index + 1}</span>
-        {prop.status}
-      </div>
-      <div className="t-name flex-basis-7">{prop.tName}</div>
-      <div className="at-name text-right flex-basis-3" title={prop.cName}>
-        {prop.cName}
-      </div>
-    </components.TrackItem>
-  );
+class ArtistsList extends React.Component<{ artists: any[] }> {
+  constructor(props) {
+    super(props);
+  }
+
+  public render() {
+    if (!this.props.artists) {
+      return <NoData></NoData>;
+    }
+
+    return (
+      <components.Body className="stripe">
+        {this.props.artists.map((item, index) => {
+          let cssName = "status";
+          let status = "-";
+          if (item.lastRank < index) {
+            status = "↓";
+            cssName += " blue";
+          } else if (item.lastRank > index) {
+            status = "↑";
+            cssName += " red";
+          }
+          return (
+            <components.TrackItem key={index} className="flex-row">
+              <div className={getIndexClassName(index)}>{index + 1}</div>
+              <div className={cssName}>{status}</div>
+              <div>{item.name}</div>
+            </components.TrackItem>
+          );
+        })}
+        <components.Footer>
+          <a href="#" className="link">
+            查看更多>
+          </a>
+        </components.Footer>
+      </components.Body>
+    );
+  }
 }
 
-export default TopList;
+function getIndexClassName(index: number) {
+  let name = "index";
+  if (index < 3) name += " index-top";
+  return name;
+}
+
+function NoData() {
+  return <components.Body>暂无数据</components.Body>;
+}

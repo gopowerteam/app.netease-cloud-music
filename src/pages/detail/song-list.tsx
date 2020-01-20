@@ -4,11 +4,10 @@ import { useParams } from "react-router-dom";
 import { PlayListService } from "~/services/playlist.service";
 import { RequestParams } from "~/core/http";
 import { Avatar, Button, Tabs } from "antd";
-import { convertPlayCount } from "~/shared/utils/common";
+import { tenThoursand, dateFormat } from "~/shared/utils/common";
 import MusicList from "~/components/shared/music-list";
 import { PlayListCommentList } from "~/components/shared/comment-list";
 import CollectorList from "~/components/shared/collector-list";
-import { dateFormat } from "~/utils/filter";
 
 const components = {
   Wrapper: styled.section``,
@@ -142,7 +141,7 @@ export class SongList extends Component<SongListProps, SongListState> {
               </span>
               <span>
                 <span>播放数:</span>
-                <span>{convertPlayCount(playlist.playCount)}</span>
+                <span>{tenThoursand(playlist.playCount)}</span>
               </span>
             </div>
             <div className="description">简介: {playlist.description}</div>

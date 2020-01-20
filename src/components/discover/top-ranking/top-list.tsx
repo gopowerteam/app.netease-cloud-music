@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { RequestParams } from "~/core/http";
 import { Icon } from "antd";
 import { PlayListService } from "~/services/playlist.service";
-import { dateFormat } from "~/utils/filter";
+import { dateFormat } from "~/shared/utils/common";
 import { RankService } from "~/services/rank.service";
 import { Link } from "react-router-dom";
 

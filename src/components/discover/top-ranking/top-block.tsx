@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Icon } from "antd";
-import { tenThoursand } from "~/utils/filter";
+import { tenThoursand } from "~/shared/utils/common";
 
 type TopBlockProp = {
   name: string;

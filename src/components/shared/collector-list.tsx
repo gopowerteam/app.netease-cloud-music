@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { PlayListService } from "~/services/playlist.service";
 import { RequestParams } from "~/core/http";
-import { Row, Col, Avatar, Icon, Pagination } from "antd";
+import { Row, Col, Avatar, Pagination } from "antd";
 import { PageService } from "~/core/services/page.service";
 
 const components = {
@@ -40,7 +40,7 @@ export default class CollectorList extends Component<
 
   public render() {
     return (
-      <Row>
+      <components.Wrapper>
         <Row>
           {this.state.collectors.map(collector => (
             <Col
@@ -66,7 +66,7 @@ export default class CollectorList extends Component<
             />
           </Col>
         </Row>
-      </Row>
+      </components.Wrapper>
     );
   }
 

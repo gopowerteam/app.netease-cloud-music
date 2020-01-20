@@ -1,4 +1,4 @@
-import { ExtendService, RequestParams } from '../http'
+import { ExtendService } from '../http'
 
 export class PageService extends ExtendService {
   public default = {

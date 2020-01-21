@@ -5,10 +5,13 @@ import { ReactSVG } from "react-svg";
 import { Consumer } from "reto";
 import styled from "styled-components";
 import { RouterStore } from "../../../store/router.store";
-import { UserStatus } from "~/components/user/user-status";
+import UserAuth from "~/components/auth/user-auth";
 
 const components = {
   ComponentWrap: styled.section`
+    .ant-menu-item {
+      padding-left: 5px !important;
+    }
     .ant-menu-item.ant-menu-item-active {
       color: #000;
       fill: #000;
@@ -17,11 +20,23 @@ const components = {
     .ant-menu-item.ant-menu-item-selected {
       color: red;
       fill: red;
+
+      &::after {
+        border-right-color: #a2a2a2;
+      }
+    }
+
+    .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+      background-color: #e2e2e2;
+    }
+
+    .ant-menu-item-group-title {
+      font-size: 12px;
     }
   `,
   ReactSVG: styled(ReactSVG)`
-    width: 28px;
-    height: 28px;
+    width: 10px;
+    height: 32px;
   `
 };
 
@@ -43,7 +58,7 @@ export default class SideMenu extends Component {
   public render() {
     return (
       <components.ComponentWrap>
-        <UserStatus></UserStatus>
+        <UserAuth></UserAuth>
         {this.menuContainer()}
       </components.ComponentWrap>
     );
@@ -128,7 +143,7 @@ export default class SideMenu extends Component {
       <Menu.Item key={item.id}>
         <Row gutter={8} align="middle" type="flex">
           <Col
-            span={6}
+            style={{ flexBasis: "40px" }}
             className="flex-row justify-content-center align-items-center"
           >
             <components.ReactSVG
@@ -136,12 +151,14 @@ export default class SideMenu extends Component {
               beforeInjection={svg => {
                 svg.setAttribute(
                   "style",
-                  "height: 25px;width:25px;line-height:25px;"
+                  "height: 20px;width:20px;line-height:20px;"
                 );
               }}
             />
           </Col>
-          <Col span={18}>{item.title}</Col>
+          <Col style={{ fontSize: "12px" }} span={18}>
+            {item.title}
+          </Col>
         </Row>
       </Menu.Item>
     );

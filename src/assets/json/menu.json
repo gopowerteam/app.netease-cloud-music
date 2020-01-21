@@ -87,10 +87,11 @@
     "level": 1,
     "title": "朋友",
     "icon": "friend",
-    "path": "/friend"
+    "path": "/friend",
+    "group": "乐库"
   },
   {
-    "id": 12,
+    "id": 13,
     "level": 1,
     "title": "下载管理",
     "icon": "love",
@@ -98,28 +99,28 @@
     "group": "我的音乐"
   },
   {
-    "id": 13,
-    "parent": 12,
+    "id": 14,
+    "parent": 13,
     "level": 2,
     "title": "已下载单曲",
     "path": ""
   },
   {
-    "id": 14,
-    "parent": 12,
+    "id": 15,
+    "parent": 13,
     "level": 2,
     "title": "已下载节目",
     "path": ""
   },
   {
-    "id": 15,
-    "parent": 12,
+    "id": 16,
+    "parent": 13,
     "level": 2,
     "title": "正在下载",
     "path": ""
   },
   {
-    "id": 16,
+    "id": 17,
     "level": 1,
     "title": "我的收藏",
     "icon": "collect",
@@ -127,29 +128,29 @@
     "group": "我的音乐"
   },
   {
-    "id": 17,
-    "parent": 16,
+    "id": 18,
+    "parent": 17,
     "level": 2,
     "title": "专辑",
     "path": ""
   },
   {
-    "id": 18,
-    "parent": 16,
+    "id": 19,
+    "parent": 17,
     "level": 2,
     "title": "歌手",
     "path": ""
   },
   {
-    "id": 19,
-    "parent": 16,
+    "id": 20,
+    "parent": 17,
     "level": 2,
     "title": "视频",
     "path": ""
   },
   {
-    "id": 20,
-    "parent": 16,
+    "id": 21,
+    "parent": 17,
     "level": 2,
     "title": "专栏",
     "path": ""

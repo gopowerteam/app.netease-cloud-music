@@ -1,6 +1,5 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
-import { BannerService } from "~/services/banner.service";
 import { RequestParams } from "~/core/http";
 import { CommentService } from "~/services/comment.service";
 import { Observable } from "rxjs";
@@ -58,8 +57,6 @@ class CommentList extends Component<CommentListProps, CommentListState> {
   }
 
   public render() {
-    const { hotComments } = this.state;
-
     return (
       <components.Wrapper>
         {this.getCommentEditor()}

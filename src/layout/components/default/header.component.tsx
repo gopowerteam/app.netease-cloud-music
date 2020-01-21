@@ -116,7 +116,11 @@ export default class Header extends Component<{}, HeaderState> {
   public getSearchContainer() {
     return (
       <components.SearchWrap>
-        <Input prefix={<Icon type="search" />} allowClear></Input>
+        <Input
+          placeholder="搜索"
+          prefix={<Icon type="search" />}
+          allowClear
+        ></Input>
       </components.SearchWrap>
     );
   }

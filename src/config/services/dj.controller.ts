@@ -25,5 +25,11 @@ export const DjController: ControllerConfig = {
     controller,
     action: "paygift",
     type: RequestMethod.Get
+  },
+  // 电台 分类推荐
+  recommend: {
+    controller,
+    action: "recommend/type",
+    type: RequestMethod.Get
   }
 };

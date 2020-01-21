@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import TopList from "~/components/discover/top-ranking/top-list";
 import { RankService } from "~/services/rank.service";

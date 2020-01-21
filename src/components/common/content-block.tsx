@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Button } from "antd";
 
 const components = {
   Wrapper: styled.div`
@@ -28,18 +29,18 @@ type ContentProp = {
 };
 
 export default class ContentBlock extends React.Component<ContentProp> {
-  constructor(props) {
-    super(props);
-  }
-
   public render() {
     return (
       <components.Wrapper>
         <div className="header flex-row ">
           <h2>{this.props.title}</h2>
-          <a className="link" href="#" onClick={this.props.onClick}>
-            更多 >
-          </a>
+          {this.props.onClick ? (
+            <Button type="link" className="link" onClick={this.props.onClick}>
+              更多 >
+            </Button>
+          ) : (
+            <div />
+          )}
         </div>
         {this.props.children}
       </components.Wrapper>

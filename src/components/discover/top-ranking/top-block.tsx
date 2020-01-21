@@ -64,10 +64,6 @@ const components = {
  * 排行榜歌单 Block
  */
 export default class TopBlock extends React.Component<TopBlockProp, any> {
-  constructor(props: TopBlockProp) {
-    super(props);
-  }
-
   private get playCount() {
     return tenThoursand(this.props.playCount);
   }

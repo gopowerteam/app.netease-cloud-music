@@ -13,6 +13,9 @@ const components = {
     margin: 20px auto;
     .banner-item {
       position: relative;
+      .img {
+        width: 100%;
+      }
       .tag {
         position: absolute;
         bottom: 5px;
@@ -46,7 +49,7 @@ export default class DjBanner extends React.Component<any, DjBannerState> {
         <Carousel autoplay>
           {this.state.banners.map(banner => (
             <div className="banner-item" key={banner.targetType}>
-              <img alt="" src={banner.pic}></img>
+              <img alt="" src={banner.pic} className="img"></img>
               <Tag className="tag" color="#ff0000cf">
                 {banner.typeTitle}
               </Tag>

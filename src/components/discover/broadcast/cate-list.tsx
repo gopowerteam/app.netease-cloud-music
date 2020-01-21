@@ -1,5 +1,4 @@
 import React from "react";
-import { Carousel, Tag, Icon } from "antd";
 import { DjService } from "~/services/dj.service";
 import { RequestParams } from "~/core/http";
 import styled from "styled-components";
@@ -8,10 +7,14 @@ type CateListState = {
   categories: CateInfo[] | null;
 };
 
-type CateInfo = {
+export type CateInfo = {
   id: string;
   name: string;
   picUrl: string;
+};
+
+type CateListProps = {
+  onload: (data: CateInfo[]) => void;
 };
 
 const components = {
@@ -49,7 +52,10 @@ const components = {
   `
 };
 
-export default class CateList extends React.Component<any, CateListState> {
+export default class CateList extends React.Component<
+  CateListProps,
+  CateListState
+> {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,6 +74,7 @@ export default class CateList extends React.Component<any, CateListState> {
           };
         })
       });
+      this.props.onload(this.state.categories!.splice(0, 5));
     });
   }
 

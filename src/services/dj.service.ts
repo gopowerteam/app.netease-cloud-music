@@ -29,13 +29,25 @@ export class DjService {
   }
 
   /**
-   * 获取付费精选 分页
+   * 查询付费精选 分页
    * @param requestParams
    */
   @Request({
     server: DjController.paygift
   })
-  public getPaygift(requestParams: RequestParams): Observable<any> {
+  public queryPaygift(requestParams: RequestParams): Observable<any> {
+    return requestParams.request();
+  }
+
+  /**
+   * 查询分类推荐
+   * @param requestParams
+   */
+  @Request({
+    server: DjController.recommend,
+    force: true
+  })
+  public queryRecommendByType(requestParams: RequestParams): Observable<any> {
     return requestParams.request();
   }
 }

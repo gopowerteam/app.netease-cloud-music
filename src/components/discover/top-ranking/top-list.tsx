@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { RequestParams } from "~/core/http";
 import { Icon } from "antd";
@@ -194,13 +194,6 @@ class RankTitle extends React.Component<{
   updateDate: number;
   hiddenPlay?: boolean;
 }> {
-  private updateDateStr = "----";
-
-  constructor(props) {
-    super(props);
-    this.updateDateStr = dateFormat(props.updateDate, "MM月dd日") + "更新";
-  }
-
   public render() {
     return (
       <components.Title
@@ -225,6 +218,10 @@ class RankTitle extends React.Component<{
       </components.Title>
     );
   }
+
+  private get updateDateStr() {
+    return dateFormat(this.props.updateDate, "MM月dd日") + "更新";
+  }
 }
 
 class TrackList extends React.Component<{
@@ -233,10 +230,6 @@ class TrackList extends React.Component<{
   listType: string;
   id: string;
 }> {
-  constructor(props) {
-    super(props);
-  }
-
   public render() {
     if (!this.props.tracks) {
       return <NoData></NoData>;
@@ -294,10 +287,6 @@ class TrackList extends React.Component<{
 }
 
 class ArtistsList extends React.Component<{ artists: any[] }> {
-  constructor(props) {
-    super(props);
-  }
-
   public render() {
     if (!this.props.artists) {
       return <NoData></NoData>;

@@ -76,14 +76,20 @@ export default class PlayListDetail extends React.Component<
     this.queryPlayList();
   }
 
+  public componentDidUpdate(prevProps) {
+    if (prevProps.tag !== this.props.tag) {
+      this.queryPlayList();
+    }
+  }
+
   public render() {
     if (!this.props.tag) return <components.Wrapper></components.Wrapper>;
 
     return (
       <components.Wrapper className="flex-row">
-        {this.state.playDataSet.map(item => (
+        {this.state.playDataSet.map((item, index) => (
           <Block
-            key={item.id}
+            key={index}
             pic={item.coverImgUrl}
             name={item.name}
             playCount={item.playCount}

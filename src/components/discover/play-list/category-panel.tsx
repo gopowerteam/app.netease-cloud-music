@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Button, Popover, Icon, Radio } from "antd";
+import { Button, Popover, Icon } from "antd";
 import { PlayListService } from "~/services/playlist.service";
 import { RequestParams } from "~/core/http";
 
@@ -111,7 +111,9 @@ export default class CategoryPanel extends React.Component<
           </Button>
         </div>
         {Object.entries(this.state.resData.categories).map(([k, v]) => {
-          const cates = this.state.resData!.sub.filter(x => x.category == k);
+          const cates = this.state.resData!.sub.filter(
+            x => x.category.toString() === k.toString()
+          );
           return (
             <components.TypeItem key={k} className="flex-row">
               <div className="type-name">{v}</div>

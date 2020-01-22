@@ -11,18 +11,18 @@ const components = {
     position: relative;
     cursor: pointer;
     display: flex;
-
+    align-items: center;
     &:hover {
       background-color: #f5f5f5;
     }
-  `,
-  ImgContainer: styled.div`
-    line-height: 100px;
-    position: relative;
+
     img {
       height: 80%;
       border-radius: 10px;
     }
+  `,
+  ImgContainer: styled.div`
+    flex: 1;
   `,
   IndexContainer: styled.div`
     line-height: 100px;
@@ -30,7 +30,7 @@ const components = {
     color: #b7b7b7;
   `,
   InfoContainer: styled.div`
-    flex: 1;
+    flex: 4;
     display: flex;
     align-items: center;
     justify-content: between;
@@ -73,11 +73,8 @@ export default class MusicItem extends Component<
 
   public getImgContainer() {
     const { data } = this.props;
-    return (
-      <components.ImgContainer>
-        <img alt="" src={data.picUrl}></img>
-      </components.ImgContainer>
-    );
+
+    return <img alt="" src={data.picUrl}></img>;
   }
 
   public getIndexContainer() {

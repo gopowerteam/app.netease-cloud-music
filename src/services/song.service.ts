@@ -16,4 +16,15 @@ export class SongService {
   public getSongDetail(requestParams: RequestParams): Observable<any> {
     return requestParams.request();
   }
+
+  /**
+  * 歌曲URL
+  * @param requestParams
+  */
+  @Request({
+    server: SongController.url
+  })
+  public getSongUrl(requestParams: RequestParams): Observable<any> {
+    return requestParams.request();
+  }
 }

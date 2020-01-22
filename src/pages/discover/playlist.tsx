@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { PlayListService } from "~/services/playlist.service";
 import { RequestParams } from "~/core/http";
-import { Button } from "antd";
 import CategoryPanel from "~/components/discover/play-list/category-panel";
 import PlayListDetail from "~/components/discover/play-list/play-list-detail";
 

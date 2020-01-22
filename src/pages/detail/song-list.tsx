@@ -116,9 +116,7 @@ export class SongList extends Component<SongListProps, SongListState> {
               size={24}
               src={playlist.creator.avatarUrl}
             ></Avatar>
-            <a href="" className="nickname">
-              {playlist.creator.nickname}
-            </a>
+            <a className="nickname">{playlist.creator.nickname}</a>
             <span className="create-time">
               {dateFormat(playlist.createTime)} 创建
             </span>

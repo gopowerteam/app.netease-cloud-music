@@ -4,6 +4,8 @@ import { SongService } from "~/services/song.service";
 import { RequestParams } from "~/core/http";
 import { Table, Row, Col, Icon } from "antd";
 import moment from "moment";
+import { Consumer } from "reto";
+import { AudioStore } from "~/store/audio.store";
 
 const components = {
   Wrapper: styled.section`
@@ -87,13 +89,20 @@ export default class MusicList extends Component<
   public render() {
     return (
       <components.Wrapper>
-        <Table
-          locale={{ emptyText: "暂无数据" }}
-          rowKey="id"
-          pagination={false}
-          dataSource={this.state.songs}
-          columns={this.columns}
-        ></Table>
+        <Consumer of={AudioStore}>
+          {audioStore => (
+            <Table
+              locale={{ emptyText: "暂无数据" }}
+              rowKey="id"
+              pagination={false}
+              dataSource={this.state.songs}
+              columns={this.columns}
+              onRow={record => ({
+                onDoubleClick: () => this.onSelectMusic(record, audioStore)
+              })}
+            ></Table>
+          )}
+        </Consumer>
       </components.Wrapper>
     );
   }
@@ -153,5 +162,9 @@ export default class MusicList extends Component<
           songs
         });
       });
+  }
+
+  private onSelectMusic({ id }, audio) {
+    audio.play(id);
   }
 }

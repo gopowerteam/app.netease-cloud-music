@@ -12,7 +12,6 @@ import MVItem from "~/components/items/mv-item";
 import RadioItem from "~/components/items/radio-item";
 const components = {
   Wrapper: styled.section`
-    padding: 10px 0;
     .ant-carousel {
       .slick-slide {
         text-align: center;
@@ -120,7 +119,7 @@ export default class Recommend extends Component<{}, RecommendState> {
   public render() {
     return (
       <components.Wrapper>
-        {this.getBannerContainer()}
+        {this.state.banners.length ? this.getBannerContainer() : null}
         {this.getSongListContainer()}
         {this.getPrivateContainer()}
         {this.getNewSongContainer()}

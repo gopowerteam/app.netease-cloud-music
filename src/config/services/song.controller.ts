@@ -11,5 +11,10 @@ export const SongController: ControllerConfig = {
     controller: Controller,
     action: 'detail',
     type: RequestMethod.Get
+  },
+  url: {
+    controller: Controller,
+    action: 'url',
+    type: RequestMethod.Get
   }
 };

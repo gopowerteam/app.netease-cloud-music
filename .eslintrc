@@ -1,0 +1,11 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": "react-app",
+  "plugins": [
+    "typescript"
+  ],
+  "rules": {
+    "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/alt-text": "off"
+  }
+}

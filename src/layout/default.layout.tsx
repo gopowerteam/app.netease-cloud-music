@@ -28,16 +28,14 @@ const components = {
     position: relative;
   `,
   ContentWrap: styled.section`
-    overflow: auto;
     flex: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    position: relative;
   `,
   Content: styled.main`
+    overflow: auto;
     max-width: 1100px;
     min-width: 700px;
-    padding: 0 25px;
+    padding: 10px 25px;
   `
 };
 
@@ -97,7 +95,7 @@ export class DefaultLayout extends Component {
   public lauyoutContent() {
     return (
       <components.ContentWrap>
-        <components.Content>
+        <components.Content className="full-absolute">
           <Router></Router>
         </components.Content>
       </components.ContentWrap>

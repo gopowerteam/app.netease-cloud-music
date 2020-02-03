@@ -11,7 +11,7 @@ function setWebpackConfig() {
   // build时设置publicPath
   return config => {
     if (process.env.BROWSER !== "none" && process.env.REACT_APP_BASEHREF) {
-      config.output.publicPath = `${process.env.REACT_APP_BASEHREF|""}/`;
+      config.output.publicPath = `${process.env.REACT_APP_BASEHREF||""}/`;
     }
     return config;
   };

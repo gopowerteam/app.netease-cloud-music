@@ -32,7 +32,7 @@ function RouterContainer() {
 
   const baseHref = process.env.REACT_APP_BASEHREF
   const setPath = (path)=>`${baseHref||""}${path}`
-  console.log(setPath("/"))
+  
   return (
     <Switch>
       <Route exact path={setPath("/")}>

@@ -30,17 +30,20 @@ function RouterContainer() {
     routerStore.updateParams(params);
   }, [location, history, params, routerStore]);
 
+  const baseHref = process.env.REACT_APP_BASEHREF
+  const setPath = (path)=>`${baseHref||""}${path}`
+  console.log(setPath("/"))
   return (
     <Switch>
-      <Route exact path="/">
-        <Redirect push to="/discover/recommend"></Redirect>
+      <Route exact path={setPath("/")}>
+        <Redirect push to={setPath("/discover/recommend")}></Redirect>
       </Route>
-      <Route path="/discover/recommend" children={<Recommend />}></Route>
-      <Route path="/discover/ranking" children={<TopRanking />}></Route>
-      <Route path="/discover/broadcast" children={<Broadcast />}></Route>
-      <Route path="/discover/playlist" children={<PlayList />}></Route>
-      <Route path="/fm" children={<Index />}></Route>
-      <Route path="/detail/song-list/:id" children={<SongListDetail />}></Route>
+      <Route path={setPath("/discover/recommend")} children={<Recommend />}></Route>
+      <Route path={setPath("/discover/ranking")}  children={<TopRanking />}></Route>
+      <Route path={setPath("/discover/broadcast")} children={<Broadcast />}></Route>
+      <Route path={setPath("/discover/playlist")} children={<PlayList />}></Route>
+      <Route path={setPath("/fm")} children={<Index />}></Route>
+      <Route path={setPath("/detail/song-list/:id")}  children={<SongListDetail />}></Route>
     </Switch>
   );
 }

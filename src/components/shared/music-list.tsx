@@ -164,7 +164,9 @@ export default class MusicList extends Component<
       });
   }
 
-  private onSelectMusic({ id }, audio) {
-    audio.play(id);
+  private onSelectMusic({ id }, audioStore) {
+    audioStore.updateAudio(id).then(audio => {
+      audio.play();
+    });
   }
 }

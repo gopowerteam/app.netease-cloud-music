@@ -3,52 +3,78 @@ import { useState } from "react";
 import { Provider as StoreProvider } from "reto";
 import { SongService } from "../services/song.service";
 import { RequestParams } from "../core/http";
-import { Media } from "../shared/utils/media";
+import { AudioCenter } from "../shared/utils/audio-center";
 import { zip } from "rxjs";
+import { message } from "antd";
 
-const media = new Media();
+const audioCenter = new AudioCenter();
 const songService = new SongService();
 
 export function AudioStore() {
-  const [music, _updateMusic] = useState();
+  const [audio, _updateAudio] = useState();
+  const [audioData, _updateAudioData] = useState();
+
   /**
-   * 播放音乐
+   * 获取音频地址
+   * @param id
+   * @param br
+   */
+  const _getAudioUrl = (id, br) =>
+    songService.getSongUrl(new RequestParams({ id, br }));
+
+  /**
+   *
+   * @param id  获取音频信息
+   */
+  const _getAudioDetail = id =>
+    songService.getSongDetail(new RequestParams({ ids: [id] }));
+
+  /**
+   * 更新当前音乐媒体
    * @param id
    */
-  const play = (id: number, br = 320000) => {
-    if (music && music.id === id) {
-      return;
+  const updateAudio = (id: number, br = 320000) => {
+    if (audioData && audioData.id === id) {
+      return Promise.resolve(audio);
     }
 
-    zip(_getMusicUrl(id, br), _getMusicDetail(id)).subscribe(
-      ([urlResult, musicResult]) => {
-        const {
-          data: [urlData]
-        } = urlResult;
-        // 播放音乐
-        media.play(urlData.url);
+    return new Promise((resolve, reject) => {
+      // 获取音频数据
+      zip(_getAudioUrl(id, br), _getAudioDetail(id)).subscribe(
+        ([audioUrlResult, audioDataResult]) => {
+          // 音频地址信息
+          const {
+            data: [{ url: audioUrl }]
+          } = audioUrlResult;
+          // 音频相关信息
+          const {
+            songs: [audioData]
+          } = audioDataResult;
 
-        const {
-          songs: [musicData]
-        } = musicResult;
-        // 更新当前播放音乐
-        _updateMusic(musicData);
-      }
-    );
-  };
+          if (audioUrl) {
+            // 更新音乐
+            audioCenter.create(audioUrl).then(audio => {
+              // 更新音频对象
+              _updateAudio(audio);
+              // 更新音频数据
+              _updateAudioData(audioData);
 
-  const _getMusicUrl = (id, br) => {
-    return songService.getSongUrl(new RequestParams({ id, br }));
-  };
-
-  const _getMusicDetail = id => {
-    return songService.getSongDetail(new RequestParams({ ids: [id] }));
+              resolve(audio);
+            });
+          } else {
+            // 无法获取播放地址
+            reject();
+            message.warn("未获取该音乐版权,无法播放");
+          }
+        }
+      );
+    });
   };
 
   return {
-    music,
-    play,
-    media
+    audio,
+    audioData,
+    updateAudio
   };
 }
 

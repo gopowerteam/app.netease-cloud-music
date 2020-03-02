@@ -2,22 +2,23 @@ const {
   override,
   fixBabelImports,
   addLessLoader,
-  addWebpackAlias
+  addWebpackAlias,
+  addDecoratorsLegacy
 } = require("customize-cra");
 
 const path = require("path");
-
-function setWebpackConfig(app) {
+function setWebpackConfig() {
   // build时设置publicPath
   return config => {
-    if (app.publicPath && process.env.NODE_ENV === "production") {
-      config.output.publicPath = `${app.publicPath}/`;
+    if (process.env.BROWSER !== "none" && process.env.REACT_APP_BASEHREF) {
+      config.output.publicPath = `${process.env.REACT_APP_BASEHREF||""}/`;
     }
     return config;
   };
 }
 
 module.exports = override(
+  addDecoratorsLegacy(),
   fixBabelImports("import", {
     libraryName: "antd",
     libraryDirectory: "es",
@@ -26,9 +27,7 @@ module.exports = override(
   addLessLoader({
     javascriptEnabled: true
   }),
-  setWebpackConfig({
-    publicPath: "/netease-cloud-music"
-  }),
+  setWebpackConfig(),
   addWebpackAlias({
     "~": path.resolve(__dirname, "src")
   })

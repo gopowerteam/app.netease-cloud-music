@@ -3,52 +3,136 @@ import { useState } from "react";
 import { Provider as StoreProvider } from "reto";
 import { SongService } from "../services/song.service";
 import { RequestParams } from "../core/http";
-import { Media } from "../shared/utils/media";
+import { AudioCenter } from "../shared/utils/audio-center";
 import { zip } from "rxjs";
-
-const media = new Media();
+import { message } from "antd";
+import { AudioState } from "~/shared/utils/audio-media";
+const audioCenter = new AudioCenter();
 const songService = new SongService();
 
 export function AudioStore() {
-  const [music, _updateMusic] = useState();
+  const [audioList, _updateAudioList] = useState();
+  const [audio, _updateAudio] = useState();
+  const [audioData, _updateAudioData] = useState();
+  const [audioState, _updateAudioState] = useState(AudioState.none);
+
   /**
-   * 播放音乐
+   * 获取音频地址
    * @param id
+   * @param br
    */
-  const play = (id: number, br = 320000) => {
-    if (music && music.id === id) {
+  const _getAudioUrl = (id, br) =>
+    songService.getSongUrl(new RequestParams({ id, br }));
+
+  /**
+   *
+   * @param id  获取音频信息
+   */
+  const _getAudioDetail = id =>
+    songService.getSongDetail(new RequestParams({ ids: [id] }));
+
+  /**
+   * 更新歌单列表
+   * @param playlist
+   */
+  const updateAudioList = (playlist: any) => {
+    if (audioList && audioList.id === playlist.id) {
       return;
     }
-
-    zip(_getMusicUrl(id, br), _getMusicDetail(id)).subscribe(
-      ([urlResult, musicResult]) => {
-        const {
-          data: [urlData]
-        } = urlResult;
-        // 播放音乐
-        media.play(urlData.url);
-
-        const {
-          songs: [musicData]
-        } = musicResult;
-        // 更新当前播放音乐
-        _updateMusic(musicData);
-      }
-    );
+    _updateAudioList(playlist);
   };
 
-  const _getMusicUrl = (id, br) => {
-    return songService.getSongUrl(new RequestParams({ id, br }));
+  /**
+   * 下一首音频
+   */
+  const nextAudio = () => {
+    const trackIds = audioList.trackIds;
+    const index = trackIds.findIndex(x => x.id === audioData.id);
+
+    if (index < trackIds.length) {
+      const target = trackIds[index + 1];
+      return updateAudio(target.id);
+    } else {
+      return Promise.reject();
+    }
   };
 
-  const _getMusicDetail = id => {
-    return songService.getSongDetail(new RequestParams({ ids: [id] }));
+  /**
+   * 上一首音频
+   */
+  const preAudio = () => {
+    const trackIds = audioList.trackIds;
+    const index = trackIds.findIndex(x => x.id === audioData.id);
+
+    if (index > 0) {
+      const target = trackIds[index - 1];
+      return updateAudio(target.id);
+    } else {
+      return Promise.reject();
+    }
+  };
+
+  /**
+   * 更新当前音乐媒体
+   * @param id
+   */
+  const updateAudio = (id: number, br = 320000) => {
+    if (audioData && audioData.id === id) {
+      return Promise.resolve(audio);
+    }
+
+    return new Promise((resolve, reject) => {
+      // 获取音频数据
+      zip(_getAudioUrl(id, br), _getAudioDetail(id)).subscribe(
+        ([audioUrlResult, audioDataResult]) => {
+          // 音频地址信息
+          const {
+            data: [{ url: audioUrl }]
+          } = audioUrlResult;
+          // 音频相关信息
+          const {
+            songs: [audioData]
+          } = audioDataResult;
+
+          if (audioUrl) {
+            // 更新音乐
+            audioCenter.create(audioUrl).then(audio => {
+              // 更新音频对象
+              _updateAudio(audio);
+              // 更新音频数据
+              _updateAudioData(audioData);
+              // 设置媒体
+              setupAudio(audio);
+              resolve(audio);
+            });
+          } else {
+            // 无法获取播放地址
+            reject();
+            message.warn("未获取该音乐版权,无法播放");
+          }
+        }
+      );
+    });
+  };
+  
+
+  const setupAudio = function(audio) {
+    // 更新初始状态
+    _updateAudioState(audio.state);
+    // 更新媒体状态ƒ
+    audio.onStateChange(() => {
+      _updateAudioState(audio.state);
+    });
   };
 
   return {
-    music,
-    play,
-    media
+    audio,
+    audioState,
+    audioData,
+    updateAudio,
+    updateAudioList,
+    nextAudio,
+    preAudio
   };
 }
 

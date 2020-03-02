@@ -32,7 +32,7 @@ const components = {
 };
 
 interface MusicListProps {
-  ids: number[];
+  playlist: any;
 }
 
 interface MusicListState {
@@ -151,10 +151,12 @@ export default class MusicList extends Component<
   }
 
   private getSongDetail() {
+    const trackIds = this.props.playlist.trackIds;
+
     this.songService
       .getSongDetail(
         new RequestParams({
-          ids: this.props.ids.join(",")
+          ids: trackIds.map(x => x.id).join(",")
         })
       )
       .subscribe(({ songs }) => {
@@ -164,7 +166,10 @@ export default class MusicList extends Component<
       });
   }
 
-  private onSelectMusic({ id }, audio) {
-    audio.play(id);
+  private onSelectMusic({ id }, audioStore) {
+    audioStore.updateAudioList(this.props.playlist);
+    audioStore.updateAudio(id).then(audio => {
+      audio.play();
+    });
   }
 }

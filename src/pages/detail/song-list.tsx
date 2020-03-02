@@ -157,7 +157,7 @@ export class SongList extends Component<SongListProps, SongListState> {
     return (
       <Tabs>
         <Tabs.TabPane tab="歌曲列表" key="1">
-          <MusicList ids={playlist.trackIds.map(x => x.id)}></MusicList>
+          <MusicList playlist={playlist}></MusicList>
         </Tabs.TabPane>
         <Tabs.TabPane tab={`评论 (${playlist.commentCount})`} key="2">
           <PlayListCommentList id={playlist.id}></PlayListCommentList>

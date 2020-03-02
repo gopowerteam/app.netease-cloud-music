@@ -6,13 +6,15 @@ import { RequestParams } from "../core/http";
 import { AudioCenter } from "../shared/utils/audio-center";
 import { zip } from "rxjs";
 import { message } from "antd";
-
+import { AudioState } from "~/shared/utils/audio-media";
 const audioCenter = new AudioCenter();
 const songService = new SongService();
 
 export function AudioStore() {
+  const [audioList, _updateAudioList] = useState();
   const [audio, _updateAudio] = useState();
   const [audioData, _updateAudioData] = useState();
+  const [audioState, _updateAudioState] = useState(AudioState.none);
 
   /**
    * 获取音频地址
@@ -28,6 +30,47 @@ export function AudioStore() {
    */
   const _getAudioDetail = id =>
     songService.getSongDetail(new RequestParams({ ids: [id] }));
+
+  /**
+   * 更新歌单列表
+   * @param playlist
+   */
+  const updateAudioList = (playlist: any) => {
+    if (audioList && audioList.id === playlist.id) {
+      return;
+    }
+    _updateAudioList(playlist);
+  };
+
+  /**
+   * 下一首音频
+   */
+  const nextAudio = () => {
+    const trackIds = audioList.trackIds;
+    const index = trackIds.findIndex(x => x.id === audioData.id);
+
+    if (index < trackIds.length) {
+      const target = trackIds[index + 1];
+      return updateAudio(target.id);
+    } else {
+      return Promise.reject();
+    }
+  };
+
+  /**
+   * 上一首音频
+   */
+  const preAudio = () => {
+    const trackIds = audioList.trackIds;
+    const index = trackIds.findIndex(x => x.id === audioData.id);
+
+    if (index > 0) {
+      const target = trackIds[index - 1];
+      return updateAudio(target.id);
+    } else {
+      return Promise.reject();
+    }
+  };
 
   /**
    * 更新当前音乐媒体
@@ -58,7 +101,8 @@ export function AudioStore() {
               _updateAudio(audio);
               // 更新音频数据
               _updateAudioData(audioData);
-
+              // 设置媒体
+              setupAudio(audio);
               resolve(audio);
             });
           } else {
@@ -70,11 +114,25 @@ export function AudioStore() {
       );
     });
   };
+  
+
+  const setupAudio = function(audio) {
+    // 更新初始状态
+    _updateAudioState(audio.state);
+    // 更新媒体状态ƒ
+    audio.onStateChange(() => {
+      _updateAudioState(audio.state);
+    });
+  };
 
   return {
     audio,
+    audioState,
     audioData,
-    updateAudio
+    updateAudio,
+    updateAudioList,
+    nextAudio,
+    preAudio
   };
 }
 

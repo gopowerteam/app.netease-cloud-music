@@ -39,6 +39,7 @@ export class AudioCenter {
     if (this.media) {
       this.media.disconnect();
     }
+    
 
     this.media = new AudioMedia(this);
     await this.media.load(url);

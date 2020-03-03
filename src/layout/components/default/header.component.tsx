@@ -18,6 +18,9 @@ const components = {
       padding: 10px;
       cursor: pointer;
     }
+    .disabled {
+      color: #c5c5c5;
+    }
   `,
   MenuWrap: styled.div`
     flex: 1;
@@ -60,12 +63,18 @@ const components = {
 
 interface HeaderState {
   currentMenu: any;
+  location: any;
 }
 
 export default class Header extends Component<{}, HeaderState> {
+  private history;
+
   constructor(props) {
     super(props);
-    this.state = { currentMenu: null };
+    const location = window.location;
+    const menu = this.getMenuChildren(location);
+    const current = menu.find(item => location.pathname.includes(item.path));
+    this.state = { currentMenu: current, location };
   }
 
   public render() {
@@ -82,8 +91,30 @@ export default class Header extends Component<{}, HeaderState> {
   public getHistoryContainer() {
     return (
       <components.HistoryWrap className="full-height">
-        <Icon type="left" />
-        <Icon type="right" />
+        <Consumer of={RouterStore}>
+          {routerStore => (
+            <>
+              <Icon
+                className={routerStore.historyBackCount <= 0 ? "disabled" : ""}
+                type="left"
+                onClick={() =>
+                  routerStore.historyBackCount > 0 &&
+                  routerStore.history.goBack()
+                }
+              />
+              <Icon
+                className={
+                  routerStore.historyForwardCount <= 0 ? "disabled" : ""
+                }
+                type="right"
+                onClick={() =>
+                  routerStore.historyForwardCount > 0 &&
+                  routerStore.history.goForward()
+                }
+              />
+            </>
+          )}
+        </Consumer>
       </components.HistoryWrap>
     );
   }
@@ -92,8 +123,11 @@ export default class Header extends Component<{}, HeaderState> {
     return (
       <components.MenuWrap>
         <Consumer of={RouterStore}>
-          {routerStore =>
-            this.getMenuChildren(routerStore.location).map(item => (
+          {routerStore => {
+            this.setupHistory(routerStore);
+            return this.getMenuChildren(
+              this.state.location || routerStore.location
+            ).map(item => (
               <components.HeaderMenuItem
                 key={item.title}
                 className={
@@ -106,8 +140,8 @@ export default class Header extends Component<{}, HeaderState> {
               >
                 {item.title}
               </components.HeaderMenuItem>
-            ))
-          }
+            ));
+          }}
         </Consumer>
       </components.MenuWrap>
     );
@@ -135,6 +169,15 @@ export default class Header extends Component<{}, HeaderState> {
     );
   }
 
+  private setupHistory(routerStore) {
+    if (!this.history && routerStore.history) {
+      this.history = routerStore.history;
+      this.history.listen(location => {
+        this.changeCurrentMenuItem(location);
+      });
+    }
+  }
+
   public getMenuChildren(location) {
     const target = menuList.find(x => x.path === location.pathname);
 
@@ -155,14 +198,20 @@ export default class Header extends Component<{}, HeaderState> {
    * 设置默认菜单项
    * @param menu
    */
-  private setDefaultMenuItem(menu) {
-    let [defaultItem] = menu.children;
+  private changeCurrentMenuItem(location) {
+    this.setState({
+      location: location
+    });
+    const menu = this.getMenuChildren(location);
+    const target = menu.find(item => location.pathname.includes(item.path));
+
     if (
-      !this.state.currentMenu ||
-      !menu.children.includes(this.state.currentMenu)
+      target &&
+      this.state.currentMenu &&
+      target.path !== this.state.currentMenu.path
     ) {
-      setTimeout(() => {
-        this.onSelectMenuItem(defaultItem, {});
+      this.setState({
+        currentMenu: target
       });
     }
   }

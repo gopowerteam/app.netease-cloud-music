@@ -4,6 +4,8 @@ import { RequestParams } from "~/core/http";
 import styled from "styled-components";
 import { Icon } from "antd";
 import { tenThoursand } from "~/shared/utils/common";
+import { Consumer } from "reto";
+import { RouterStore } from "~/store/router.store";
 
 type DetailState = {
   playDataSet: any[];
@@ -89,7 +91,8 @@ export default class PlayListDetail extends React.Component<
       <components.Wrapper className="flex-row">
         {this.state.playDataSet.map((item, index) => (
           <Block
-            key={index}
+            id={item.id}
+            key={item.id}
             pic={item.coverImgUrl}
             name={item.name}
             playCount={item.playCount}
@@ -116,6 +119,7 @@ export default class PlayListDetail extends React.Component<
 }
 
 type BlockProp = {
+  id: number;
   pic: string;
   name: string;
   nickName: string;
@@ -125,18 +129,26 @@ type BlockProp = {
 class Block extends React.Component<BlockProp> {
   public render() {
     return (
-      <components.Block>
-        <img src={this.props.pic} className="img" />
-        <div className="play-count">
-          <Icon type="customer-service" />
-          {tenThoursand(this.props.playCount)}
-        </div>
-        <div className="creater">
-          <Icon type="user" />
-          {this.props.nickName}
-        </div>
-        <div className="play-list-name">{this.props.name}</div>
-      </components.Block>
+      <Consumer of={RouterStore}>
+        {routerStore => (
+          <components.Block
+            onClick={() => {
+              routerStore.history.push(`/detail/song-list/${this.props.id}`);
+            }}
+          >
+            <img src={this.props.pic} className="img" />
+            <div className="play-count">
+              <Icon type="customer-service" />
+              {tenThoursand(this.props.playCount)}
+            </div>
+            <div className="creater">
+              <Icon type="user" />
+              {this.props.nickName}
+            </div>
+            <div className="play-list-name">{this.props.name}</div>
+          </components.Block>
+        )}
+      </Consumer>
     );
   }
 }

@@ -2,6 +2,8 @@ import React from "react";
 import { DjService } from "~/services/dj.service";
 import { RequestParams } from "~/core/http";
 import styled from "styled-components";
+import { Consumer } from "reto";
+import { RouterStore } from "~/store/router.store";
 
 type RecommendTypeState = {
   items: any;
@@ -75,15 +77,25 @@ export default class RecommendType extends React.Component<
     }
     return (
       <components.Wrapper className="flex-row">
-        {this.state.items.map((item, index) => (
-          <components.Block key={index} className="block">
-            <div className="pic">
-              <img src={item.picUrl} alt="" className="img" />
-              <div className="name">{item.name}</div>
-            </div>
-            <div className="rc-text">{item.rcmdtext}</div>
-          </components.Block>
-        ))}
+        <Consumer of={RouterStore}>
+          {routerStore =>
+            this.state.items.map((item, index) => (
+              <components.Block
+                key={index}
+                className="block"
+                onClick={() => {
+                  routerStore.history.push(`/detail/song-list/${item.id}`);
+                }}
+              >
+                <div className="pic">
+                  <img src={item.picUrl} alt="" className="img" />
+                  <div className="name">{item.name}</div>
+                </div>
+                <div className="rc-text">{item.rcmdtext}</div>
+              </components.Block>
+            ))
+          }
+        </Consumer>
       </components.Wrapper>
     );
   }

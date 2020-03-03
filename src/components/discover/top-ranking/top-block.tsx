@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { Icon } from "antd";
 import { tenThoursand } from "~/shared/utils/common";
+import { Consumer } from "reto";
+import { RouterStore } from "~/store/router.store";
 
 type TopBlockProp = {
   name: string;
@@ -70,18 +72,26 @@ export default class TopBlock extends React.Component<TopBlockProp, any> {
 
   public render() {
     return (
-      <components.Wrapper>
-        <components.Content
-          style={{ backgroundImage: `url(${this.props.coverImgUrl})` }}
-        >
-          <div className="title">
-            <Icon type="customer-service" style={{ marginRight: "10px" }} />
-            {this.playCount}
-          </div>
-          <Icon className="play" type="play-circle" />
-        </components.Content>
-        <components.Footer>{this.props.name}</components.Footer>
-      </components.Wrapper>
+      <Consumer of={RouterStore}>
+        {routerStore => (
+          <components.Wrapper
+            onClick={() => {
+              routerStore.history.push(`/detail/song-list/${this.props.id}`);
+            }}
+          >
+            <components.Content
+              style={{ backgroundImage: `url(${this.props.coverImgUrl})` }}
+            >
+              <div className="title">
+                <Icon type="customer-service" style={{ marginRight: "10px" }} />
+                {this.playCount}
+              </div>
+              <Icon className="play" type="play-circle" />
+            </components.Content>
+            <components.Footer>{this.props.name}</components.Footer>
+          </components.Wrapper>
+        )}
+      </Consumer>
     );
   }
 }
